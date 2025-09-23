@@ -1,0 +1,76 @@
+<!--pages/address/edit.wxml-->
+<view class="edit-container">
+  <view class="form-content">
+    <!-- 收货人信息 -->
+    <view class="form-section">
+      <view class="section-title">收货人信息</view>
+      
+      <view class="form-item">
+        <text class="label required">收货人</text>
+        <input 
+          class="input" 
+          placeholder="请输入收货人姓名"
+          value="{{formData.name}}"
+          data-field="name"
+          bindinput="onFormInput"
+        />
+      </view>
+      
+      <view class="form-item">
+        <text class="label required">手机号</text>
+        <input 
+          class="input" 
+          placeholder="请输入手机号"
+          type="number"
+          maxlength="11"
+          value="{{formData.phone}}"
+          data-field="phone"
+          bindinput="onFormInput"
+        />
+      </view>
+    </view>
+
+    <!-- 收货地址 -->
+    <view class="form-section">
+      <view class="section-title">收货地址</view>
+      
+      <view class="form-item">
+        <text class="label required">详细地址</text>
+        <view class="address-input-group">
+          <textarea 
+            class="address-input" 
+            placeholder="请输入详细地址，包括省市区街道门牌号等"
+            value="{{formData.address}}"
+            data-field="address"
+            bindinput="onFormInput"
+            auto-height
+          />
+          <view class="location-btn" bindtap="chooseLocation">
+            <text class="location-icon">📍</text>
+            <text class="location-text">定位</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设置默认 -->
+    <view class="form-section">
+      <view class="default-setting">
+        <text class="default-label">设为默认地址</text>
+        <switch 
+          class="default-switch"
+          checked="{{formData.isDefault}}"
+          bindchange="toggleDefault"
+          color="#007aff"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部保存按钮 -->
+  <view class="save-btn-container">
+    <button class="save-btn" bindtap="saveAddress">
+      保存
+    </button>
+  </view>
+</view>

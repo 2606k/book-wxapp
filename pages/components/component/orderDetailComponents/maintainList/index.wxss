@@ -1,0 +1,72 @@
+page {
+  background-color: #f8f8f8;
+}
+.main {
+  height: 480rpx;
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  font-size: 24rpx;
+}
+.main .main-item {
+  display: flex;
+  justify-content: space-between;
+}
+.main .title {
+  height: 88rpx;
+  line-height: 88rpx;
+}
+.main .type {
+  height: 88rpx;
+  line-height: 88rpx;
+}
+.main .line {
+  border: 1rpx solid #ccc;
+}
+.main .info {
+  height: 150rpx;
+  padding: 30rpx 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.main .info .content {
+  color: #666;
+}
+.main .materials {
+  height: 88rpx;
+  line-height: 88rpx;
+  display: flex;
+  flex-direction: column;
+}
+.main .materials .con {
+  height: 62rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: #666;
+}
+/* 按钮样式开始 */
+.btn {
+  height: 158rpx;
+  background-color: #fff;
+  box-shadow: 0 0 20rpx 0 rgba(153, 153, 153, 0.2);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+.btn .submit {
+  width: 690rpx;
+  height: 98rpx;
+  background-color: #0090ff;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 8rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

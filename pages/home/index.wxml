@@ -1,0 +1,89 @@
+<!-- 轮播图 -->
+<swiper indicator-dots autoplay circular interval="{{3000}}" class="book-banner">
+  <swiper-item>
+    <image src='https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01Z5n8yI1L3Q8ZYqo3I_!!2206678097909-0-cib.jpg'></image>
+  </swiper-item>
+  <swiper-item>
+    <image src='https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01lNqX3A1L3Q8aGpaBK_!!2206678097909-0-cib.jpg'></image>
+  </swiper-item>
+  <swiper-item>
+    <image src='https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01N2mYeP1L3Q8a6j5wn_!!2206678097909-0-cib.jpg'></image>
+  </swiper-item>
+</swiper>
+
+<!-- 搜索栏 -->
+<view class="search-container">
+  <view class="search-box" bindtap="goToSearch">
+    <icon type="search" size="16" color="#999"></icon>
+    <text class="search-placeholder">搜索书籍名称、作者</text>
+  </view>
+</view>
+
+<!-- 书籍分类区域 -->
+<view class="category-container">
+  <view class="category-title">图书分类</view>
+  <view class="category-grid">
+    <view class="category-item" bindtap="goToCategory" data-category="文学小说">
+      <image src='https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01v5J5J61L3Q8XpGqv7_!!2206678097909-0-cib.jpg'></image>
+      <view class="category-name">文学小说</view>
+    </view>
+    <view class="category-item" bindtap="goToCategory" data-category="科技编程">
+      <image src='https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01fX9nZy1L3Q8XpGt0k_!!2206678097909-0-cib.jpg'></image>
+      <view class="category-name">科技编程</view>
+    </view>
+    <view class="category-item" bindtap="goToCategory" data-category="经济管理">
+      <image src='https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01ZqsXNd1L3Q8ZYqkLh_!!2206678097909-0-cib.jpg'></image>
+      <view class="category-name">经济管理</view>
+    </view>
+    <view class="category-item" bindtap="goToCategory" data-category="教育考试">
+      <image src='https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01VhX5oo1L3Q8Y3zRdE_!!2206678097909-0-cib.jpg'></image>
+      <view class="category-name">教育考试</view>
+    </view>
+    <view class="category-item" bindtap="goToCategory" data-category="历史文化">
+      <image src='https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01wWqbks1L3Q8ZYqnfB_!!2206678097909-0-cib.jpg'></image>
+      <view class="category-name">历史文化</view>
+    </view>
+    <view class="category-item" bindtap="goToCategory" data-category="儿童读物">
+      <image src='https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01dZhRft1L3Q8Y3zPd4_!!2206678097909-0-cib.jpg'></image>
+      <view class="category-name">儿童读物</view>
+    </view>
+  </view>
+</view>
+
+<!-- 热门推荐 -->
+<view class="recommend-section">
+  <view class="section-title">热门推荐</view>
+  <scroll-view class="recommend-scroll" scroll-x>
+    <view class="recommend-list">
+      <view class="book-item" wx:for="{{recommendBooks}}" wx:key="id" bindtap="goToBookDetail" data-book="{{item}}">
+        <image class="book-cover" src="{{item.imageUrl}}" mode="aspectFit"></image>
+        <view class="book-info">
+          <view class="book-title">{{item.name}}</view>
+          <view class="book-author">{{item.author}}</view>
+          <view class="book-price">¥{{item.price / 100}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
+<!-- 新书上架 -->
+<view class="new-books-section">
+  <view class="section-title">新书上架</view>
+  <view class="books-grid">
+    <view class="book-card" wx:for="{{newBooks}}" wx:key="id" bindtap="goToBookDetail" data-book="{{item}}">
+      <image class="book-image" src="{{item.imageUrl}}" mode="aspectFit"></image>
+      <view class="book-details">
+        <view class="book-name">{{item.name}}</view>
+        <view class="book-author">{{item.author}}</view>
+        <view class="book-price">¥{{item.price / 100}}</view>
+        <view class="add-to-cart" catchtap="addToCart" data-book="{{item}}">
+          <text>加入购物车</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+

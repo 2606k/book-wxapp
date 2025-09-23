@@ -1,0 +1,118 @@
+.task-ordersFinished {
+  height: 420rpx;
+  padding: 30rpx 30rpx 20rpx 30rpx;
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  .top {
+    height: 70rpx;
+    line-height: 70rpx;
+    font-size: 24rpx;
+    margin-bottom: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      color: #1993fc;
+      .image {
+        height: 70rpx;
+        width: 70rpx;
+        border-radius: 50%;
+        /* 控制头像与用户名的距离 */
+        margin-right: 20rpx;
+        background-color: #1993fc;
+      }
+    }
+    /* 订单状态 */
+    .right {
+      font-weight: 400;
+      color: #999;
+    }
+  }
+  /* 订单中间部分 */
+  .content {
+    display: flex;
+    justify-content: space-between;
+    /* 订单中间左侧部分 */
+    .left {
+      /* 订单图片 */
+      .image {
+        height: 126rpx;
+        width: 126rpx;
+        background: #ffffff;
+        box-shadow: 0px 0px 20px 0px rgba(196, 196, 196, 0.3);
+        border-radius: 8px;
+      }
+    }
+    /* 订单中间部分的右侧信息 */
+    .right {
+      margin-left: 20rpx;
+      .title {
+        font-weight: 400;
+        color: #111;
+        font-size: 28rpx;
+        margin-bottom: 12rpx;
+      }
+      .content {
+        font-size: 24rpx;
+        font-weight: 400;
+        color: #666;
+        .left {
+          display: flex;
+          flex-wrap: wrap;
+          .item:nth-child(1) {
+            margin-bottom: 12rpx;
+          }
+        }
+        .right {
+          display: flex;
+          flex-wrap: wrap;
+          .item:nth-child(1) {
+            margin-bottom: 12rpx;
+          }
+        }
+      }
+    }
+  }
+  /* 订单底部信息 */
+  .bottom {
+    font-size: 24rpx;
+    color: #999;
+    .top {
+      /* 取消日期与服务地址的间距 */
+      margin-bottom: 0;
+      display: flex;
+      justify-content: flex-start;
+      .time {
+        margin-left: 40rpx;
+      }
+    }
+    /* 底部价格,结束按钮区域 */
+    .btn {
+      margin-top: 20rpx;
+      display: flex;
+      justify-content: space-between;
+      .price {
+        flex: 5;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 24rpx;
+        color: #111;
+        .text {
+          margin-left: 14rpx;
+          color: #0090ff;
+        }
+      }
+      .buttonall {
+        width: 216rpx;
+        height: 60rpx;
+        line-height: 60rpx;
+        font-size: 24rpx;
+        font-weight: 400;
+        color: #0090ff;
+        background-color: #fff;
+        border-color: #0090ff;
+      }
+    }
+  }
+}

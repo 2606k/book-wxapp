@@ -1,0 +1,98 @@
+<!--pages/checkout/index.wxml-->
+<view class="checkout-container">
+  <!-- 收货地址 -->
+  <view class="address-section" bindtap="selectAddress">
+    <view wx:if="{{!selectedAddress}}" class="no-address">
+      <view class="address-icon">📍</view>
+      <text class="no-address-text">请选择收货地址</text>
+      <text class="arrow">></text>
+    </view>
+    
+    <view wx:else class="address-info">
+      <view class="address-header">
+        <view class="address-icon">📍</view>
+        <view class="user-info">
+          <text class="user-name">{{selectedAddress.name}}</text>
+          <text class="user-phone">{{selectedAddress.phone}}</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
+      <view class="address-detail">
+        <text class="address-text">{{selectedAddress.address}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="goods-section">
+    <view class="section-header">
+      <text class="section-title">商品清单</text>
+      <text class="goods-count">共{{totalCount}}件</text>
+    </view>
+    
+    <view class="goods-list">
+      <view 
+        class="goods-item"
+        wx:for="{{selectedItems}}" 
+        wx:key="id"
+      >
+        <view class="goods-image">
+          <image src="{{item.imageUrl}}" mode="aspectFit"></image>
+        </view>
+        
+        <view class="goods-info">
+          <view class="goods-name">{{item.bookName}}</view>
+          <view class="goods-price-qty">
+            <text class="goods-price">¥{{item.price / 100}}</text>
+            <text class="goods-qty">×{{item.quantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单备注 -->
+  <view class="remark-section">
+    <view class="section-title">订单备注</view>
+    <textarea 
+      class="remark-input"
+      placeholder="选填，请输入订单备注"
+      value="{{remark}}"
+      bindinput="onRemarkInput"
+      maxlength="200"
+    />
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="cost-section">
+    <view class="cost-item">
+      <text class="cost-label">商品总价</text>
+      <text class="cost-value">¥{{totalAmount / 100}}</text>
+    </view>
+    <view class="cost-item">
+      <text class="cost-label">运费</text>
+      <text class="cost-value free">免费</text>
+    </view>
+    <view class="cost-divider"></view>
+    <view class="cost-item total">
+      <text class="cost-label">实付款</text>
+      <text class="cost-value">¥{{totalAmount / 100}}</text>
+    </view>
+  </view>
+
+  <!-- 底部提交栏 -->
+  <view class="submit-bar">
+    <view class="total-info">
+      <text class="total-text">合计: </text>
+      <text class="total-amount">¥{{totalAmount / 100}}</text>
+    </view>
+    
+    <button 
+      class="submit-btn {{submitting ? 'submitting' : ''}}"
+      bindtap="submitOrder"
+      disabled="{{submitting}}"
+    >
+      {{submitting ? '提交中...' : '提交订单'}}
+    </button>
+  </view>
+</view>

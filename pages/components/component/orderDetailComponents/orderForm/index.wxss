@@ -1,0 +1,17 @@
+.list {
+  padding: 30rpx;
+  height: 350rpx;
+  background-color: #fff;
+  font-size: 24rpx;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.list .list-item {
+  display: flex;
+}
+.list .list-item .title {
+  /* 控制标题与内容的距离 */
+  margin-right: 50rpx;
+}

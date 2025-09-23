@@ -1,0 +1,83 @@
+page {
+  background: #f3f3f3;
+}
+
+/* 预约列表样式 */
+.appointment-list {
+  padding: 20rpx;
+}
+
+.list-header {
+  padding: 30rpx 0;
+  text-align: center;
+}
+
+.list-header .title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.list-content {
+  min-height: 200rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.appointment-item {
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.item-header .name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.item-header .phone {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.info-row .label {
+  min-width: 140rpx;
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 20rpx;
+}
+
+.info-row .value {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  word-break: break-all;
+}

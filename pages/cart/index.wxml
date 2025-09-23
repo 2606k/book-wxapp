@@ -1,0 +1,106 @@
+<!--pages/cart/index.wxml-->
+<view class="cart-container">
+  <!-- 头部 -->
+  <view class="cart-header">
+    <view class="header-left">
+      <text class="cart-title">购物车</text>
+      <text class="cart-count">({{cartItems.length}})</text>
+    </view>
+    <view class="header-right">
+      <text class="edit-btn" bindtap="toggleEditMode">{{editMode ? '完成' : '编辑'}}</text>
+    </view>
+  </view>
+
+  <!-- 购物车列表 -->
+  <view class="cart-content">
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+    
+    <view wx:elif="{{cartItems.length === 0}}" class="empty-cart">
+      <image class="empty-icon" src="/assets/imgs/empty-cart.png" mode="aspectFit"></image>
+      <text class="empty-text">购物车空空如也</text>
+      <button class="continue-btn" bindtap="continueShopping">去逛逛</button>
+    </view>
+    
+    <view wx:else class="cart-list">
+      <view 
+        class="cart-item"
+        wx:for="{{cartItems}}" 
+        wx:key="id"
+        wx:for-index="index"
+      >
+        <view class="item-select" bindtap="toggleItemSelect" data-index="{{index}}">
+          <icon 
+            type="{{item.selected ? 'success' : 'circle'}}" 
+            size="20"
+            color="{{item.selected ? '#007aff' : '#ccc'}}"
+          />
+        </view>
+        
+        <view class="item-image">
+          <image src="{{item.imageUrl}}" mode="aspectFit"></image>
+        </view>
+        
+        <view class="item-info">
+          <view class="item-name">{{item.bookName}}</view>
+          <view class="item-price">¥{{item.price / 100}}</view>
+          
+          <view class="item-actions">
+            <view class="quantity-control">
+              <view 
+                class="quantity-btn decrease {{item.quantity <= 1 ? 'disabled' : ''}}"
+                bindtap="decreaseQuantity"
+                data-index="{{index}}"
+              >-</view>
+              <text class="quantity-text">{{item.quantity}}</text>
+              <view 
+                class="quantity-btn increase"
+                bindtap="increaseQuantity"
+                data-index="{{index}}"
+              >+</view>
+            </view>
+            
+            <view wx:if="{{editMode}}" class="delete-btn" bindtap="removeItem" data-index="{{index}}">
+              <text>删除</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部结算栏 -->
+  <view wx:if="{{cartItems.length > 0}}" class="cart-footer">
+    <view class="footer-left">
+      <view class="select-all" bindtap="toggleSelectAll">
+        <icon 
+          type="{{selectAll ? 'success' : 'circle'}}" 
+          size="20"
+          color="{{selectAll ? '#007aff' : '#ccc'}}"
+        />
+        <text class="select-all-text">全选</text>
+      </view>
+      
+      <view wx:if="{{editMode}}" class="clear-cart" bindtap="clearCart">
+        <text>清空购物车</text>
+      </view>
+    </view>
+    
+    <view class="footer-right">
+      <view wx:if="{{!editMode}}" class="total-info">
+        <text class="total-text">合计: </text>
+        <text class="total-amount">¥{{totalAmount / 100}}</text>
+      </view>
+      
+      <button 
+        wx:if="{{!editMode}}"
+        class="checkout-btn {{totalCount > 0 ? 'active' : 'disabled'}}"
+        bindtap="goToCheckout"
+        disabled="{{totalCount === 0}}"
+      >
+        结算({{totalCount}})
+      </button>
+    </view>
+  </view>
+</view>

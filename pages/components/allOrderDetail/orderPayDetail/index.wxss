@@ -1,0 +1,57 @@
+page {
+  background-color: #f8f8f8;
+  padding-bottom: 208rpx;
+}
+.finish {
+  margin: 30rpx 0;
+  font-size: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tips {
+  height: 60rpx;
+  width: 100%;
+  background: #fdf1f1;
+  position: fixed;
+  left: 0;
+  bottom: 148rpx;
+  color: red;
+  font-size: 20rpx;
+  padding: 16rpx 30rpx;
+  box-sizing: border-box;
+}
+.bottom {
+  display: flex;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 148rpx;
+  padding: 30rpx;
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0 0 20rpx 0 rgba(153, 153, 153, 0.2);
+  width: 100vw;
+}
+.bottom .price {
+  width: 50%;
+  display: flex;
+  text-align: center;
+  margin-left: 12rpx;
+  line-height: 40rpx;
+  font-size: 24rpx;
+}
+.bottom .price .text {
+  color: red;
+}
+.bottom .pay {
+  width: 336rpx;
+  height: 88rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32rpx;
+  color: #fff;
+  border: 0;
+  background-color: #0090ff;
+}

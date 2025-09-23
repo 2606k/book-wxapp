@@ -1,0 +1,77 @@
+<!--pages/address/index.wxml-->
+<view class="address-container">
+  <!-- 地址列表 -->
+  <view class="address-content">
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+    
+    <view wx:elif="{{addressList.length === 0}}" class="empty-address">
+      <image class="empty-icon" src="/assets/imgs/address/zanwudizhi.png" mode="aspectFit"></image>
+      <text class="empty-text">暂无收货地址</text>
+      <button class="add-btn" bindtap="addNewAddress">添加地址</button>
+    </view>
+    
+    <view wx:else class="address-list">
+      <view 
+        class="address-item {{selectMode ? 'selectable' : ''}}"
+        wx:for="{{addressList}}" 
+        wx:key="id"
+        wx:for-index="index"
+        bindtap="selectAddress"
+        data-index="{{index}}"
+      >
+        <view class="address-header">
+          <view class="user-info">
+            <text class="user-name">{{item.name}}</text>
+            <text class="user-phone">{{item.phone}}</text>
+          </view>
+          <view wx:if="{{item.isDefault}}" class="default-tag">默认</view>
+        </view>
+        
+        <view class="address-detail">
+          <text class="address-text">{{item.address}}</text>
+        </view>
+        
+        <view wx:if="{{!selectMode}}" class="address-actions">
+          <view class="action-left">
+            <view 
+              class="set-default {{item.isDefault ? 'disabled' : ''}}"
+              bindtap="setDefaultAddress"
+              data-index="{{index}}"
+            >
+              <icon 
+                type="{{item.isDefault ? 'success' : 'circle'}}" 
+                size="16"
+                color="{{item.isDefault ? '#007aff' : '#ccc'}}"
+              />
+              <text class="default-text">设为默认</text>
+            </view>
+          </view>
+          
+          <view class="action-right">
+            <view class="edit-btn" bindtap="editAddress" data-index="{{index}}">
+              <text>编辑</text>
+            </view>
+            <view class="delete-btn" bindtap="deleteAddress" data-index="{{index}}">
+              <text>删除</text>
+            </view>
+          </view>
+        </view>
+        
+        <view wx:if="{{selectMode}}" class="select-indicator">
+          <text class="select-text">选择此地址</text>
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部添加按钮 -->
+  <view wx:if="{{addressList.length > 0 && !selectMode}}" class="add-address-btn">
+    <button class="add-new-btn" bindtap="addNewAddress">
+      <text class="add-icon">+</text>
+      <text>添加新地址</text>
+    </button>
+  </view>
+</view>

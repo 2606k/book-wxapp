@@ -1,0 +1,115 @@
+<!--pages/categoryBrand/index.wxml-->
+
+<!-- 搜索栏 -->
+<view class="search-container">
+  <view class="search-box">
+    <icon type="search" size="16" color="#999"></icon>
+    <input class="search-input" placeholder="搜索书籍名称、作者" value="{{searchKeyword}}" bindinput="onSearchInput" />
+  </view>
+  <view class="search-btn" bindtap="doSearch">搜索</view>
+</view>
+
+<!-- 筛选栏 -->
+<view class="filter-container">
+  <view class="filter-item" bindtap="showCategoryFilter">
+    <text>分类: {{selectedCategory || '全部'}}</text>
+    <text class="arrow-down">▼</text>
+  </view>
+  <view class="filter-item" bindtap="showSortFilter">
+    <text>{{sortText}}</text>
+    <text class="arrow-down">▼</text>
+  </view>
+</view>
+
+<!-- 书籍列表 -->
+<view class="books-container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  <view wx:elif="{{books.length === 0}}" class="empty">
+    <text>暂无书籍数据</text>
+  </view>
+  <view wx:else class="books-grid">
+    <view 
+      class="book-card"
+      wx:for="{{books}}" 
+      wx:key="id"
+      bindtap="goToBookDetail"
+      data-book="{{item}}"
+    >
+      <image class="book-image" src="{{item.imageUrl}}" mode="aspectFit"></image>
+      <view class="book-info">
+        <view class="book-title">{{item.name}}</view>
+        <view class="book-author">{{item.author}}</view>
+        <view class="book-price">¥{{item.price / 100}}</view>
+        <view class="book-actions">
+          <view class="add-to-cart" catchtap="addToCart" data-book="{{item}}">
+            <text>加入购物车</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 分类筛选弹窗 -->
+<view class="modal-mask" wx:if="{{showCategoryModal}}" bindtap="closeCategoryModal"></view>
+<view class="filter-modal" wx:if="{{showCategoryModal}}">
+  <view class="modal-header">
+    <text class="modal-title">选择分类</text>
+    <text class="close-btn" bindtap="closeCategoryModal">×</text>
+  </view>
+  <view class="filter-options">
+    <view class="filter-option {{!selectedCategory ? 'active' : ''}}" bindtap="selectCategory" data-category="">
+      <text>全部</text>
+    </view>
+    <view 
+      class="filter-option {{selectedCategory === item ? 'active' : ''}}"
+      wx:for="{{categories}}" 
+      wx:key="*this"
+      bindtap="selectCategory"
+      data-category="{{item}}"
+    >
+      <text>{{item}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 排序筛选弹窗 -->
+<view class="modal-mask" wx:if="{{showSortModal}}" bindtap="closeSortModal"></view>
+<view class="filter-modal" wx:if="{{showSortModal}}">
+  <view class="modal-header">
+    <text class="modal-title">排序方式</text>
+    <text class="close-btn" bindtap="closeSortModal">×</text>
+  </view>
+  <view class="filter-options">
+    <view 
+      class="filter-option {{sortType === 'default' ? 'active' : ''}}"
+      bindtap="selectSort"
+      data-sort="default"
+    >
+      <text>默认排序</text>
+    </view>
+    <view 
+      class="filter-option {{sortType === 'price_asc' ? 'active' : ''}}"
+      bindtap="selectSort"
+      data-sort="price_asc"
+    >
+      <text>价格从低到高</text>
+    </view>
+    <view 
+      class="filter-option {{sortType === 'price_desc' ? 'active' : ''}}"
+      bindtap="selectSort"
+      data-sort="price_desc"
+    >
+      <text>价格从高到低</text>
+    </view>
+    <view 
+      class="filter-option {{sortType === 'sales' ? 'active' : ''}}"
+      bindtap="selectSort"
+      data-sort="sales"
+    >
+      <text>销量排序</text>
+    </view>
+  </view>
+</view>

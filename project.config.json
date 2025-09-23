@@ -1,0 +1,204 @@
+{
+  "description": "项目配置文件",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": false,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useIsolateContext": true,
+    "useCompilerModule": false,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "compileWorklet": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.9.3",
+  "appid": "touristappid",
+  "projectname": "ehome",
+  "cloudfunctionTemplateRoot": "",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "plugin": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": [
+        {
+          "id": -1,
+          "name": "pages/order/index",
+          "pathName": "pages/order/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 2,
+          "name": "收费标准表格组件",
+          "pathName": "pages/components/component/orderDetailComponents/chargeStandard/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "维修清单",
+          "pathName": "pages/components/component/orderDetailComponents/maintainList/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "待接单详情",
+          "pathName": "pages/components/allOrderDetail/orderWaitDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 5,
+          "name": "待上门订单详情",
+          "pathName": "pages/components/allOrderDetail/orderWaitHomeDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 6,
+          "name": "取消订单模块",
+          "pathName": "pages/components/modal/cancelOrderModal/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "取消订单详情",
+          "pathName": "pages/components/cancelOrder/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "服务中订单详情",
+          "pathName": "pages/components/allOrderDetail/orderInServiceDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "结束服务详情",
+          "pathName": "pages/components/finishedService/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/components/reservation/index",
+          "pathName": "pages/components/reservation/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "待支付订单详情",
+          "pathName": "pages/components/allOrderDetail/orderPayDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "已结束订单详情",
+          "pathName": "pages/components/allOrderDetail/orderFinishedDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "超时取消单",
+          "pathName": "pages/components/allOrderDetail/orderOverTimeDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "已支付订单详情",
+          "pathName": "pages/components/allOrderDetail/orderPaidDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "已支付订单详情-师傅维修中",
+          "pathName": "pages/components/allOrderDetail/orderPaidDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "维修清单",
+          "pathName": "pages/components/component/orderDetailComponents/maintainList/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "登录",
+          "pathName": "pages/login/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "我的",
+          "pathName": "pages/mine/index",
+          "scene": null
+        }
+      ]
+    }
+  },
+  "editorSetting": {}
+}

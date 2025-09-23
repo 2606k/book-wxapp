@@ -1,0 +1,16 @@
+.header {
+  background-color: #0090ff;
+  height: 200rpx;
+  padding: 30rpx;
+}
+.header .left .top {
+  font-size: 40rpx;
+  color: #fff;
+  font-weight: 500;
+  margin-top: 18rpx;
+  margin-bottom: 8rpx;
+}
+.header .left .bottom {
+  font-size: 28rpx;
+  color: #ededed;
+}

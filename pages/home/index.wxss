@@ -1,0 +1,243 @@
+/* pages/home/index.wxss */
+page {
+  background-color: #f5f5f5;
+}
+
+/* 轮播图样式 */
+.book-banner {
+  height: 350rpx;
+  margin-bottom: 20rpx;
+}
+
+.book-banner image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0 0 20rpx 20rpx;
+}
+
+/* 搜索栏样式 */
+.search-container {
+  padding: 20rpx;
+  background: #fff;
+  margin-bottom: 20rpx;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 50rpx;
+  border: 1rpx solid #e0e0e0;
+}
+
+.search-placeholder {
+  margin-left: 15rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 分类区域样式 */
+.category-container {
+  background: #fff;
+  padding: 30rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.category-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  border-left: 4rpx solid #007aff;
+  padding-left: 20rpx;
+}
+
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.category-item {
+  width: 30%;
+  text-align: center;
+  margin-bottom: 30rpx;
+  padding: 20rpx 10rpx;
+  border-radius: 15rpx;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.category-item:active {
+  transform: scale(0.95);
+  box-shadow: 0 1rpx 6rpx rgba(0, 0, 0, 0.15);
+}
+
+.category-item image {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 15rpx;
+  border-radius: 10rpx;
+}
+
+.category-name {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 推荐区域样式 */
+.recommend-section, .new-books-section {
+  background: #fff;
+  padding: 30rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  border-left: 4rpx solid #007aff;
+  padding-left: 20rpx;
+}
+
+/* 热门推荐横向滚动 */
+.recommend-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.recommend-list {
+  display: inline-flex;
+  padding-bottom: 20rpx;
+}
+
+.book-item {
+  display: inline-block;
+  width: 280rpx;
+  margin-right: 20rpx;
+  background: #f8f9fa;
+  border-radius: 15rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.book-item:active {
+  transform: scale(0.95);
+}
+
+.book-cover {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 10rpx;
+  margin-bottom: 15rpx;
+}
+
+.book-info {
+  text-align: left;
+}
+
+.book-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-author {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-price {
+  font-size: 30rpx;
+  color: #ff4d4f;
+  font-weight: bold;
+}
+
+/* 新书上架网格布局 */
+.books-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.book-card {
+  width: 48%;
+  background: #fff;
+  border-radius: 15rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.book-card:active {
+  transform: translateY(-2rpx);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.book-image {
+  width: 100%;
+  height: 200rpx;
+  background: #f8f9fa;
+}
+
+.book-details {
+  padding: 20rpx;
+}
+
+.book-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-author {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-price {
+  font-size: 30rpx;
+  color: #ff4d4f;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+}
+
+.add-to-cart {
+  background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
+  color: white;
+  text-align: center;
+  padding: 15rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.add-to-cart:active {
+  transform: scale(0.95);
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+

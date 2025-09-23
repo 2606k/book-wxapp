@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {},
+  "navigationBarTitleText": "服务保障",
+  "navigationBarBackgroundColor":"#1993fc",
+  "navigationBarTextStyle":"white"
+}

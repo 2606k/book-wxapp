@@ -1,0 +1,50 @@
+<!--pages/order/index.wxml-->
+<!-- 预约列表页面 -->
+<view class="appointment-list">
+  <view class="list-header">
+    <text class="title">我的预约</text>
+  </view>
+  
+  <view class="list-content">
+    <view wx:if="{{appointmentList.length === 0}}" class="empty-state">
+      <text>暂无预约记录</text>
+    </view>
+    
+    <view wx:for="{{appointmentList}}" wx:key="id" class="appointment-item">
+      <view class="item-header">
+        <text class="name">{{item.name}}</text>
+        <text class="phone">{{item.phone}}</text>
+      </view>
+      
+      <view class="item-content">
+        <view class="info-row">
+          <text class="label">服务类型：</text>
+          <text class="value">{{item.repairtype}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">品牌：</text>
+          <text class="value">{{item.brandname}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">服务地址：</text>
+          <text class="value">{{item.address}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">预约时间：</text>
+          <text class="value">{{item.time}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">创建时间：</text>
+          <text class="value">{{item.createdat}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+  
+
+  

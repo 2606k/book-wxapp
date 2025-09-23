@@ -1,0 +1,291 @@
+/* pages/components/reservation/index.wxss */
+/* 设置整个页面背景色 */
+page {
+  background: #f8f8f8;
+  font-size: 24rpx;
+}
+.start {
+  font-weight: 400;
+  color: #ff3b30;
+  line-height: 33rpx;
+  letter-spacing: 4rpx;
+}
+.line {
+  display: block;
+  margin: 0 auto;
+  width: 690rpx;
+  height: 1rpx;
+  background-color: #d7d7d7;
+}
+/* <!-- 报修项目模块开始 --------------------------------------------------------- --> */
+.repairs {
+  background-color: #fff;
+  height: 88rpx;
+  padding: 0 30rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.repairs .repairs-item {
+  margin-top: 28rpx;
+}
+.repairs view:nth-child(3) {
+  color: #999;
+}
+/* 报修项目的icon区域开始------------------------------------------------------------------- */
+.icon-group {
+  display: flex;
+  justify-content: space-around;
+  height: 88rpx;
+  background-color: #fff;
+}
+.icon-group .icon-group-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon-group .icon-group-item image {
+  width: 20rpx;
+  height: 22rpx;
+  margin-right: 12rpx;
+}
+/* 更换按钮 */
+.repairs .changButton {
+  text-align: center;
+  height: 60rpx;
+  width: 100rpx;
+}
+/* <!-- 空调机型选择区域-----------------------------------------------------------> */
+/* 整个外包的大盒子样式 */
+.air-conditioner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  text-align: center;
+  margin-top: 20rpx;
+  /* 盒子里边的每个item样式 */
+}
+.air-conditioner .air-conditioner-item {
+  padding: 0 30rpx;
+  height: 88rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* 报修数量样式开始 */
+}
+.air-conditioner .air-conditioner-item .input {
+  display: flex;
+  /* 控制 input框的数字 与 加减号垂直水平对齐 */
+  justify-content: center;
+  align-items: center;
+  /* 控制报修数量的input框 */
+}
+.air-conditioner .air-conditioner-item .input .public {
+  height: 24rpx;
+  width: 24rpx;
+  background-color: #fff;
+  border: 2rpx solid #999;
+  text-align: center;
+  line-height: 24rpx;
+  border-radius: 50%;
+  margin: 0 20rpx;
+}
+.air-conditioner .air-conditioner-item .input input {
+  width: 33rpx;
+  line-height: 40rpx;
+}
+/* 服务地址模块------------------------------------------------------------------------ */
+/* 选择服务地址的样式 */
+.address {
+  padding: 0 30rpx;
+  background-color: #fff;
+  margin-top: 20rpx;
+}
+.address .address-item {
+  height: 88rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* 补充问题描述区域------------------------------------------------------ */
+.question {
+  padding: 0 30rpx;
+  background-color: #fff;
+  height: 260rpx;
+}
+.question .item {
+  padding: 28rpx 0 20rpx 0;
+}
+/* 立即预约按钮---------------------------------------------------- */
+.button {
+  height: 98rpx;
+  line-height: 80rpx;
+  color: #fff;
+  font-weight: 400;
+  font-size: 32rpx;
+  position: fixed;
+  bottom: 30rpx;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: #0090ff;
+}
+/* 遮罩层 ---------------------------------------------------------*/
+.mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  z-index: 9000;
+  opacity: 0.5;
+}
+/* 弹出层 ------------------------------------------------------*/
+.modalDlg {
+  width: 100%;
+  height: 600rpx;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 30rpx;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  border-radius: 8rpx 8rpx 0px 0px;
+  /* 弹出层上部  */
+  /* 弹出层的服务项目 */
+}
+.modalDlg .modalDlgTop {
+  font-size: 32rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.modalDlg .serviceProject {
+  margin-top: 80rpx;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* 弹出层中的报修项目具体的按钮区域 */
+  /* 控制 中间一行的样式 */
+}
+.modalDlg .serviceProject .serviceProject-item {
+  width: 210rpx;
+  height: 60rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  border: 1rpx solid #999;
+  /* 控制文字样式 */
+  text-align: center;
+  line-height: 60rpx;
+  color: #999;
+}
+.modalDlg .serviceProject view:nth-child(4) {
+  margin: 30rpx 0;
+}
+.modalDlg .serviceProject view:nth-child(5) {
+  margin: 30rpx 0;
+}
+.modalDlg .serviceProject view:nth-child(6) {
+  margin: 30rpx 0;
+}
+/* 点击服务项目时高亮-------------------------------------------------------------- */
+.active {
+  color: #0090ff !important;
+  border: 1rpx solid #0090ff !important;
+}
+/* 点击空调机型弹出一个弹出层 */
+/* <!-- 点击空调机型弹出弹出层--------------------------------------------- --> */
+.modalDlg {
+  /* 控制第一行的样式 */
+}
+.modalDlg .air-modalDlg {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 80rpx;
+}
+.modalDlg .air-modalDlg-item {
+  height: 60rpx;
+  width: 210rpx;
+  border-radius: 8px;
+  border: 1rpx solid #999;
+  /* 控制文字水平垂直居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modalDlg view:nth-child(4) {
+  margin: 30rpx 0;
+}
+.modalDlg view:nth-child(5) {
+  margin: 30rpx 0;
+}
+.modalDlg view:nth-child(6) {
+  margin: 30rpx 0;
+}
+/* 立即预约按钮弹出框的样式 */
+.isRuleShow {
+  display: block;
+}
+.isRuleHide {
+  display: none;
+}
+.float {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+.float .floatContent {
+  width: 536rpx;
+  height: 527rpx;
+  background: #fff;
+  /* 控制弹出框在中间显示 */
+  margin: 40% auto;
+  border-radius: 10rpx;
+  /* 控制弹出框的标题 */
+  /* 标题与正文之间的横线 */
+  /* 线段 */
+}
+.float .floatContent .title {
+  font-size: 36rpx;
+  color: #111;
+  padding: 68rpx 258rpx 30rpx 58rpx;
+}
+.float .floatContent .lineShort {
+  margin-left: 58rpx;
+  width: 47rpx;
+  height: 3rpx;
+  background: #111111;
+}
+.float .floatContent .content {
+  height: 122rpx;
+  width: 420rpx;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: #333;
+  padding: 32rpx 58rpx 109rpx;
+}
+.float .floatContent .line1 {
+  border: 1rpx solid #d7d7d7;
+}
+.float .floatContent .btn {
+  height: 87rpx;
+  line-height: 87rpx;
+  display: flex;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #999;
+}
+.float .floatContent .btn .button1 {
+  width: 50%;
+  text-align: center;
+}
+.float .floatContent .btn .confirm {
+  color: #0090ff;
+}
