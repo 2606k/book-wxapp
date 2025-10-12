@@ -11,6 +11,109 @@ page {
   padding-bottom: 150rpx;
 }
 
+/* 配送方式区域 */
+.delivery-section {
+  background: #fff;
+  margin-bottom: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.delivery-options {
+  margin-top: 20rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.delivery-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 24rpx 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  background: #f8f9fa;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.delivery-option.active {
+  border-color: #007aff;
+  background: #e6f2ff;
+}
+
+.option-icon {
+  font-size: 40rpx;
+  margin-right: 16rpx;
+}
+
+.option-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.option-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.option-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.option-check {
+  width: 36rpx;
+  height: 36rpx;
+  background: #007aff;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+/* 自提提示 */
+.pickup-tip {
+  background: #fff7e6;
+  border: 1rpx solid #ffd591;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  gap: 16rpx;
+}
+
+.tip-icon {
+  font-size: 36rpx;
+  flex-shrink: 0;
+}
+
+.tip-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.tip-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #d46b08;
+}
+
+.tip-address,
+.tip-time {
+  font-size: 26rpx;
+  color: #ad6800;
+  line-height: 1.5;
+}
+
 /* 收货地址区域 */
 .address-section {
   background: #fff;

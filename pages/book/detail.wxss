@@ -1,0 +1,281 @@
+/* pages/book/detail.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 140rpx;
+}
+
+/* 加载中 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 32rpx;
+  color: #999;
+}
+
+/* 书籍详情 */
+.book-detail {
+  padding-bottom: 20rpx;
+}
+
+/* 书籍头部 */
+.book-header {
+  background-color: #fff;
+  padding: 40rpx;
+  display: flex;
+  gap: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.book-cover {
+  width: 240rpx;
+  height: 320rpx;
+  flex-shrink: 0;
+  position: relative;
+  border-radius: 8rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.book-cover image {
+  width: 100%;
+  height: 100%;
+}
+
+.preview-tip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 22rpx;
+  padding: 8rpx;
+  text-align: center;
+}
+
+.book-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.book-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.4;
+}
+
+.book-author,
+.book-publisher {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.book-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-top: 8rpx;
+}
+
+.price-symbol {
+  font-size: 28rpx;
+  color: #ff5722;
+  font-weight: bold;
+}
+
+.price-value {
+  font-size: 44rpx;
+  color: #ff5722;
+  font-weight: bold;
+}
+
+.price-original {
+  font-size: 28rpx;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.book-stock {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.out-of-stock {
+  color: #ff5722;
+}
+
+/* 详细信息区域 */
+.book-details-section,
+.book-description-section {
+  background-color: #fff;
+  padding: 40rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid #eee;
+}
+
+.detail-item {
+  display: flex;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+}
+
+.detail-item .label {
+  width: 160rpx;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.detail-item .value {
+  flex: 1;
+  color: #333;
+}
+
+/* 简介 */
+.description-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* 底部占位 */
+.bottom-placeholder {
+  height: 120rpx;
+}
+
+/* 底部操作栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border-top: 1rpx solid #eee;
+  padding: 16rpx 20rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.bar-left {
+  display: flex;
+  gap: 24rpx;
+  flex-shrink: 0;
+}
+
+.bar-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.bar-btn .iconfont {
+  font-size: 36rpx;
+}
+
+.bar-btn .btn-text {
+  font-size: 20rpx;
+  color: #666;
+}
+
+.bar-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+/* 数量选择器 */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.quantity-btn {
+  width: 50rpx;
+  height: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.quantity-btn:active {
+  background-color: #e0e0e0;
+}
+
+.quantity-input {
+  width: 60rpx;
+  height: 50rpx;
+  text-align: center;
+  font-size: 24rpx;
+  border-left: 1rpx solid #ddd;
+  border-right: 1rpx solid #ddd;
+}
+
+/* 操作按钮 */
+.action-btn {
+  padding: 16rpx 28rpx;
+  border-radius: 50rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cart-btn {
+  background-color: #ffa726;
+  color: #fff;
+  min-width: 120rpx;
+}
+
+.cart-btn:active {
+  background-color: #ff9800;
+}
+
+.buy-btn {
+  background-color: #ff5722;
+  color: #fff;
+  min-width: 120rpx;
+}
+
+.buy-btn:active {
+  background-color: #f4511e;
+}
+
+.out-of-stock-bar {
+  flex: 1;
+  text-align: center;
+  color: #999;
+  font-size: 26rpx;
+}
+

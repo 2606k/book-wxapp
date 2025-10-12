@@ -2,10 +2,11 @@
 
 <!-- 用户信息头部 -->
 <view class="user-header">
-  <button class='user-info-btn' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">
+  <view class='user-info-btn' bindtap="handleLogin">
     <image src="{{avatarUrl}}" class='avatar'></image>
     <text class="nickname">{{nickName}}</text>
-  </button>
+    <text class="login-tip" wx:if="{{!isLogin}}">点击登录</text>
+  </view>
 </view>
 
 <!-- 功能菜单 -->
@@ -36,7 +37,7 @@
 </view>
 
 <!-- 退出登录按钮 -->
-<view class="logout-section" wx:if="{{nickName !== '立即登录'}}">
+<view class="logout-section" wx:if="{{isLogin}}">
   <button class="logout-btn" bindtap="logout">退出登录</button>
 </view>
 

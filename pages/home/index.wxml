@@ -12,46 +12,31 @@
 </swiper>
 
 <!-- 搜索栏 -->
-<view class="search-container">
+<!-- <view class="search-container">
   <view class="search-box" bindtap="goToSearch">
     <icon type="search" size="16" color="#999"></icon>
     <text class="search-placeholder">搜索书籍名称、作者</text>
   </view>
-</view>
+</view> -->
 
 <!-- 书籍分类区域 -->
 <view class="category-container">
   <view class="category-title">图书分类</view>
   <view class="category-grid">
-    <view class="category-item" bindtap="goToCategory" data-category="文学小说">
-      <image src='https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01v5J5J61L3Q8XpGqv7_!!2206678097909-0-cib.jpg'></image>
-      <view class="category-name">文学小说</view>
-    </view>
-    <view class="category-item" bindtap="goToCategory" data-category="科技编程">
-      <image src='https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01fX9nZy1L3Q8XpGt0k_!!2206678097909-0-cib.jpg'></image>
-      <view class="category-name">科技编程</view>
-    </view>
-    <view class="category-item" bindtap="goToCategory" data-category="经济管理">
-      <image src='https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01ZqsXNd1L3Q8ZYqkLh_!!2206678097909-0-cib.jpg'></image>
-      <view class="category-name">经济管理</view>
-    </view>
-    <view class="category-item" bindtap="goToCategory" data-category="教育考试">
-      <image src='https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01VhX5oo1L3Q8Y3zRdE_!!2206678097909-0-cib.jpg'></image>
-      <view class="category-name">教育考试</view>
-    </view>
-    <view class="category-item" bindtap="goToCategory" data-category="历史文化">
-      <image src='https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01wWqbks1L3Q8ZYqnfB_!!2206678097909-0-cib.jpg'></image>
-      <view class="category-name">历史文化</view>
-    </view>
-    <view class="category-item" bindtap="goToCategory" data-category="儿童读物">
-      <image src='https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01dZhRft1L3Q8Y3zPd4_!!2206678097909-0-cib.jpg'></image>
-      <view class="category-name">儿童读物</view>
+    <view class="category-item" 
+          wx:for="{{categories}}" 
+          wx:key="id" 
+          bindtap="goToCategory" 
+          data-id="{{item.id}}" 
+          data-name="{{item.categoryName}}">
+      <image src='{{item.imageUrl || "https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01v5J5J61L3Q8XpGqv7_!!2206678097909-0-cib.jpg"}}' mode="aspectFill"></image>
+      <view class="category-name">{{item.categoryName}}</view>
     </view>
   </view>
 </view>
 
 <!-- 热门推荐 -->
-<view class="recommend-section">
+<!-- <view class="recommend-section">
   <view class="section-title">热门推荐</view>
   <scroll-view class="recommend-scroll" scroll-x>
     <view class="recommend-list">
@@ -65,7 +50,7 @@
       </view>
     </view>
   </scroll-view>
-</view>
+</view> -->
 
 <!-- 新书上架 -->
 <view class="new-books-section">

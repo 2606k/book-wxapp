@@ -1,7 +1,39 @@
 <!--pages/checkout/index.wxml-->
 <view class="checkout-container">
-  <!-- 收货地址 -->
-  <view class="address-section" bindtap="selectAddress">
+  <!-- 配送方式选择 -->
+  <view class="delivery-section">
+    <view class="section-title">配送方式</view>
+    <view class="delivery-options">
+      <view 
+        class="delivery-option {{deliveryType === 1 ? 'active' : ''}}"
+        bindtap="changeDeliveryType"
+        data-type="1"
+      >
+        <view class="option-icon">🚚</view>
+        <view class="option-info">
+          <text class="option-name">送货上门</text>
+          <text class="option-desc">免运费</text>
+        </view>
+        <view class="option-check" wx:if="{{deliveryType === 1}}">✓</view>
+      </view>
+      
+      <view 
+        class="delivery-option {{deliveryType === 0 ? 'active' : ''}}"
+        bindtap="changeDeliveryType"
+        data-type="0"
+      >
+        <view class="option-icon">🏪</view>
+        <view class="option-info">
+          <text class="option-name">到店自提</text>
+          <text class="option-desc">无需填写地址</text>
+        </view>
+        <view class="option-check" wx:if="{{deliveryType === 0}}">✓</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收货地址（送货时显示） -->
+  <view class="address-section" wx:if="{{deliveryType === 1}}" bindtap="selectAddress">
     <view wx:if="{{!selectedAddress}}" class="no-address">
       <view class="address-icon">📍</view>
       <text class="no-address-text">请选择收货地址</text>
@@ -20,6 +52,16 @@
       <view class="address-detail">
         <text class="address-text">{{selectedAddress.address}}</text>
       </view>
+    </view>
+  </view>
+  
+  <!-- 自提提示 -->
+  <view class="pickup-tip" wx:if="{{deliveryType === 0}}">
+    <view class="tip-icon">ℹ️</view>
+    <view class="tip-content">
+      <text class="tip-title">自提地址</text>
+      <text class="tip-address">书店地址：北京市朝阳区建国路88号SOHO现代城A座1层</text>
+      <text class="tip-time">营业时间：9:00-21:00</text>
     </view>
   </view>
 

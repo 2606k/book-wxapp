@@ -1,4 +1,6 @@
 // pages/address/index.js
+const API = require('../../utils/api/index.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -35,14 +37,6 @@ Page({
   },
 
   /**
-   * 网络请求封装
-   */
-  request(options) {
-    const app = getApp()
-    return app.request(options)
-  },
-
-  /**
    * 加载地址列表
    */
   async loadAddressList() {
@@ -51,14 +45,8 @@ Page({
       
       const openid = await this.getOpenId()
       
-      // 调用地址列表接口
-      const res = await this.request({
-        url: 'address/list',
-        method: 'POST',
-        data: {
-          openid: openid
-        }
-      })
+      // 使用封装的地址API
+      const res = await API.address.getAddressList(openid)
 
       if (res.data && res.data.code === 200) {
         const addressList = res.data.data || []
@@ -67,36 +55,21 @@ Page({
           loading: false
         })
       } else {
-        // 使用测试数据
-        const testAddressList = [
-          {
-            id: 1,
-            openid: 'test_openid',
-            name: '张三',
-            phone: '13800138000',
-            address: '北京市朝阳区建国路88号SOHO现代城',
-            isDefault: true
-          },
-          {
-            id: 2,
-            openid: 'test_openid', 
-            name: '李四',
-            phone: '13900139000',
-            address: '上海市浦东新区陆家嘴金融贸易区',
-            isDefault: false
-          }
-        ]
-        
+        // 接口调用失败，显示空列表
         this.setData({
-          addressList: testAddressList,
+          addressList: [],
           loading: false
         })
+        console.log('地址列表为空或接口返回错误')
       }
       
     } catch (error) {
       console.error('加载地址列表失败:', error)
       this.showToast('加载失败')
-      this.setData({ loading: false })
+      this.setData({ 
+        addressList: [],
+        loading: false 
+      })
     }
   },
 
@@ -133,15 +106,18 @@ Page({
     }
     
     try {
-      // 这里应该调用设置默认地址的接口
-      // 暂时使用本地更新
-      const addressList = [...this.data.addressList]
-      addressList.forEach((item, i) => {
-        item.isDefault = i === index
-      })
+      const openid = await this.getOpenId()
       
-      this.setData({ addressList })
-      this.showToast('设置成功')
+      // 使用封装的API设置默认地址
+      const res = await API.address.setDefaultAddress(address.id, openid)
+      
+      if (res.data && res.data.code === 200) {
+        this.showToast('设置成功')
+        // 刷新地址列表
+        this.loadAddressList()
+      } else {
+        this.showToast(res.data?.msg || '设置失败')
+      }
       
     } catch (error) {
       console.error('设置默认地址失败:', error)
@@ -174,13 +150,16 @@ Page({
       success: async (res) => {
         if (res.confirm) {
           try {
-            // 这里应该调用删除地址的接口
-            // 暂时使用本地删除
-            const addressList = [...this.data.addressList]
-            addressList.splice(index, 1)
+            // 使用封装的API删除地址
+            const result = await API.address.deleteAddress(address.id)
             
-            this.setData({ addressList })
-            this.showToast('删除成功')
+            if (result.data && result.data.code === 200) {
+              this.showToast('删除成功')
+              // 刷新地址列表
+              this.loadAddressList()
+            } else {
+              this.showToast(result.data?.msg || '删除失败')
+            }
             
           } catch (error) {
             console.error('删除地址失败:', error)

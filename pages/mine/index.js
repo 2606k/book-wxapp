@@ -5,14 +5,94 @@ Page({
    */
   data: {
     nickName: '立即登录',
-    avatarUrl: '',
+    avatarUrl: '/assets/imgs/mine/morentouxiang.png',
+    isLogin: false, // 登录状态
   },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    this.loadUserInfo()
+    
+    // 添加登录监听
+    const app = getApp()
+    app.addLoginListener(this.onLoginSuccess.bind(this))
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    // 每次显示页面时刷新用户信息
+    this.loadUserInfo()
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    // 移除登录监听
+    const app = getApp()
+    app.removeLoginListener(this.onLoginSuccess.bind(this))
+  },
+
+  /**
+   * 加载用户信息
+   */
+  loadUserInfo() {
+    const app = getApp()
+    const isLogin = app.checkUserAuth()
+    
+    if (isLogin) {
+      const userInfo = wx.getStorageSync('userInfo')
+      this.setData({
+        nickName: userInfo.nickName || userInfo.userName || '微信用户',
+        avatarUrl: userInfo.avatarUrl || '/assets/imgs/mine/morentouxiang.png',
+        isLogin: true
+      })
+    } else {
+      this.setData({
+        nickName: '立即登录',
+        avatarUrl: '/assets/imgs/mine/morentouxiang.png',
+        isLogin: false
+      })
+    }
+  },
+
+  /**
+   * 点击头像/昵称登录
+   */
+  handleLogin() {
+    if (this.data.isLogin) {
+      // 已登录，不做操作
+      return
+    }
+
+    const app = getApp()
+    app.showLoginDialog(() => {
+      // 登录成功，刷新用户信息
+      this.loadUserInfo()
+    })
+  },
+
+  /**
+   * 登录成功回调
+   */
+  onLoginSuccess(userInfo) {
+    console.log('个人中心收到登录成功通知:', userInfo)
+    this.loadUserInfo()
+  },
+
   /**
    * 跳转到地址管理
    */
   goToAddressManage() {
-    wx.navigateTo({
-      url: '/pages/address/index'
+    const app = getApp()
+    app.checkLoginAndShow(() => {
+      wx.navigateTo({
+        url: '/pages/address/index'
+      })
     })
   },
 
@@ -50,34 +130,30 @@ Page({
       }
     })
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    // 进入我的页面 获取用户信息,没有则使用默认的
-    const UserInfo = wx.getStorageSync('userInfo')
-    this.setData({
-      nickName: UserInfo.nickName,
-      avatarUrl: UserInfo.avatarUrl,
-    })
-  },
 
-  // 获取用户不敏感信息
-  bindGetUserInfo(e) {
-    console.log(e)
-    // 将用户信息存储到缓存中
-    wx.setStorageSync('userInfo', e.detail.userInfo)
-    // 从新加载页面
-    this.onLoad()
-  },
-  // 退出小程序账号信息
+  /**
+   * 退出小程序账号信息
+   */
   loginOut() {
-    // 清楚本地缓存
-    wx.clearStorageSync('userInfo')
-    // 从新给头像,昵称赋值
+    // 清除本地缓存
+    wx.removeStorageSync('userInfo')
+    wx.removeStorageSync('openid')
+    
+    // 清除全局数据
+    const app = getApp()
+    app.globalData.userInfo = null
+    app.globalData.openid = null
+    
+    // 重新设置默认状态
     this.setData({
       nickName: '立即登录',
       avatarUrl: '/assets/imgs/mine/morentouxiang.png',
+      isLogin: false
+    })
+    
+    wx.showToast({
+      title: '已退出登录',
+      icon: 'success'
     })
   },
   getcode() {

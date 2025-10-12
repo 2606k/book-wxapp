@@ -15,17 +15,50 @@ Page({
     // 备注
     remark: '',
     // 提交中状态
-    submitting: false
+    submitting: false,
+    // 配送方式：0=自提，1=送货
+    deliveryType: 1
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    console.log('结算页面参数:', options)
+    
+    // 处理从购物车来的商品
     if (options.items) {
-      const selectedItems = JSON.parse(decodeURIComponent(options.items))
-      this.setData({ selectedItems })
-      this.calculateTotal()
+      try {
+        const selectedItems = JSON.parse(decodeURIComponent(options.items))
+        console.log('购物车商品:', selectedItems)
+        this.setData({ selectedItems })
+        this.calculateTotal()
+      } catch (error) {
+        console.error('解析商品数据失败:', error)
+      }
+    }
+    
+    // 处理从详情页直接购买的商品
+    if (options.from === 'detail' && options.book) {
+      try {
+        const bookData = JSON.parse(decodeURIComponent(options.book))
+        console.log('详情页商品:', bookData)
+        
+        // 转换为订单商品格式
+        const selectedItems = [{
+          id: bookData.id,
+          bookId: bookData.id,
+          bookName: bookData.name,
+          imageUrl: bookData.imageUrl,
+          price: bookData.price,
+          quantity: bookData.quantity
+        }]
+        
+        this.setData({ selectedItems })
+        this.calculateTotal()
+      } catch (error) {
+        console.error('解析书籍数据失败:', error)
+      }
     }
     
     this.loadDefaultAddress()
@@ -126,14 +159,38 @@ Page({
   },
 
   /**
+   * 切换配送方式
+   */
+  changeDeliveryType(e) {
+    const type = parseInt(e.currentTarget.dataset.type)
+    this.setData({
+      deliveryType: type
+    })
+    
+    // 如果是自提，清空地址选择
+    if (type === 0) {
+      wx.showToast({
+        title: '已切换为自提',
+        icon: 'success'
+      })
+    } else {
+      // 如果是送货，加载默认地址
+      if (!this.data.selectedAddress) {
+        this.loadDefaultAddress()
+      }
+    }
+  },
+
+  /**
    * 提交订单
    */
   async submitOrder() {
-    const { selectedItems, selectedAddress, totalAmount, remark, submitting } = this.data
+    const { selectedItems, selectedAddress, totalAmount, remark, submitting, deliveryType } = this.data
     
     if (submitting) return
     
-    if (!selectedAddress) {
+    // 送货方式需要地址，自提不需要
+    if (deliveryType === 1 && !selectedAddress) {
       this.showToast('请选择收货地址')
       return
     }
@@ -151,14 +208,19 @@ Page({
       // 构建订单数据
       const orderData = {
         openid: openid,
-        name: selectedAddress.name,
-        phone: selectedAddress.phone,
-        address: selectedAddress.address,
+        deliveryType: deliveryType, // 0=自提，1=送货
         remark: remark,
         bookItems: selectedItems.map(item => ({
-          bookId: item.bookId,
+          bookId: item.bookId || item.id,
           quantity: item.quantity
         }))
+      }
+      
+      // 如果是送货，添加地址信息
+      if (deliveryType === 1 && selectedAddress) {
+        orderData.name = selectedAddress.name
+        orderData.phone = selectedAddress.phone
+        orderData.address = selectedAddress.address
       }
       
       console.log('提交订单数据:', orderData)

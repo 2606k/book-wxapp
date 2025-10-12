@@ -1,4 +1,6 @@
 // pages/categoryBrand/index.js
+const API = require('../../utils/api/index.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -9,9 +11,11 @@ Page({
     // 书籍列表
     books: [],
     // 分类列表
-    categories: ['文学小说', '科技编程', '经济管理', '教育考试', '历史文化', '儿童读物'],
-    // 当前选中的分类
-    selectedCategory: '',
+    categories: [],
+    // 当前选中的分类ID
+    selectedCategoryId: null,
+    // 当前选中的分类名称
+    selectedCategoryName: '',
     // 排序类型
     sortType: 'default',
     sortText: '默认排序',
@@ -21,7 +25,11 @@ Page({
     showCategoryModal: false,
     showSortModal: false,
     // 页面类型
-    pageType: 'category' // category, search
+    pageType: 'category', // category, search
+    // 分页参数
+    page: 1,
+    pageSize: 20,
+    hasMore: true
   },
 
   /**
@@ -35,21 +43,17 @@ Page({
       this.setData({
         pageType: 'search'
       })
-    } else if (options.category) {
-      this.setData({
-        selectedCategory: options.category,
-        pageType: 'category'
-      })
-    }
-    
-    // 设置页面标题
-    if (options.category) {
-      wx.setNavigationBarTitle({
-        title: options.category
-      })
-    } else if (options.type === 'search') {
       wx.setNavigationBarTitle({
         title: '搜索书籍'
+      })
+    } else if (options.categoryId) {
+      this.setData({
+        selectedCategoryId: parseInt(options.categoryId),
+        selectedCategoryName: options.categoryName || '',
+        pageType: 'category'
+      })
+      wx.setNavigationBarTitle({
+        title: options.categoryName || '图书列表'
       })
     } else {
       wx.setNavigationBarTitle({
@@ -57,149 +61,148 @@ Page({
       })
     }
     
+    // 加载分类列表
+    this.loadCategories()
     // 加载书籍数据
     this.loadBooks()
   },
 
   /**
-   * 网络请求封装
+   * 加载分类列表
    */
-  request(options) {
-    const app = getApp()
-    return app.request(options)
+  async loadCategories() {
+    try {
+      const res = await API.categories.getCategoryList()
+      
+      if (res.data && res.data.code === 200) {
+        // 获取所有分类数据（分页格式）
+        let categoriesData = []
+        
+        if (res.data.data.records) {
+          // 如果是分页格式
+          categoriesData = res.data.data.records
+        } else if (Array.isArray(res.data.data)) {
+          // 如果是数组格式
+          categoriesData = res.data.data
+        }
+        
+        // 映射字段名：servicetypeid -> id, name -> categoryName
+        const categories = categoriesData.map(cat => ({
+          id: cat.servicetypeid || cat.id,
+          categoryName: cat.name || cat.categoryName,
+          imageUrl: cat.imageurl || cat.imageUrl,
+          createdat: cat.createdat
+        }))
+        
+        console.log('分类列表加载成功:', categories)
+        this.setData({ categories })
+      }
+    } catch (error) {
+      console.error('加载分类失败:', error)
+    }
   },
 
   /**
    * 加载书籍列表
    */
-  async loadBooks() {
+  async loadBooks(loadMore = false) {
     try {
-      this.setData({ loading: true })
-      
-      // 构建搜索参数
-      const params = {
-        keyword: this.data.searchKeyword,
-        category: this.data.selectedCategory,
-        sortType: this.data.sortType
+      if (!loadMore) {
+        this.setData({ loading: true, page: 1 })
       }
       
-      console.log('加载书籍，参数:', params)
+      let res
       
-      // 使用测试数据（实际项目中这里应该调用API）
-      let books = [
-        {
-          id: 1,
-          name: 'JavaScript高级程序设计',
-          author: 'Nicholas C. Zakas',
-          price: 8900,
-          category: '科技编程',
-          imageUrl: 'https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01Z5n8yI1L3Q8ZYqo3I_!!2206678097909-0-cib.jpg',
-          sales: 1200
-        },
-        {
-          id: 2,
-          name: 'Java核心技术',
-          author: 'Cay S. Horstmann',
-          price: 12800,
-          category: '科技编程',
-          imageUrl: 'https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01lNqX3A1L3Q8aGpaBK_!!2206678097909-0-cib.jpg',
-          sales: 980
-        },
-        {
-          id: 3,
-          name: 'Spring实战',
-          author: 'Craig Walls',
-          price: 7900,
-          category: '科技编程',
-          imageUrl: 'https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01N2mYeP1L3Q8a6j5wn_!!2206678097909-0-cib.jpg',
-          sales: 756
-        },
-        {
-          id: 4,
-          name: '平凡的世界',
-          author: '路遥',
-          price: 6800,
-          category: '文学小说',
-          imageUrl: 'https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01v5J5J61L3Q8XpGqv7_!!2206678097909-0-cib.jpg',
-          sales: 2100
-        },
-        {
-          id: 5,
-          name: '活着',
-          author: '余华',
-          price: 4900,
-          category: '文学小说',
-          imageUrl: 'https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01fX9nZy1L3Q8XpGt0k_!!2206678097909-0-cib.jpg',
-          sales: 1800
-        },
-        {
-          id: 6,
-          name: '经济学原理',
-          author: '曼昆',
-          price: 15900,
-          category: '经济管理',
-          imageUrl: 'https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01ZqsXNd1L3Q8ZYqkLh_!!2206678097909-0-cib.jpg',
-          sales: 654
-        },
-        {
-          id: 7,
-          name: '管理学基础',
-          author: '罗宾斯',
-          price: 11900,
-          category: '经济管理',
-          imageUrl: 'https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01VhX5oo1L3Q8Y3zRdE_!!2206678097909-0-cib.jpg',
-          sales: 432
-        },
-        {
-          id: 8,
-          name: '小王子',
-          author: '圣埃克苏佩里',
-          price: 3900,
-          category: '儿童读物',
-          imageUrl: 'https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01wWqbks1L3Q8ZYqnfB_!!2206678097909-0-cib.jpg',
-          sales: 2500
-        }
-      ]
-      
-      // 根据分类筛选
-      if (this.data.selectedCategory) {
-        books = books.filter(book => book.category === this.data.selectedCategory)
-      }
-      
-      // 根据关键词搜索
+      // 根据搜索关键词或分类ID调用不同的API
       if (this.data.searchKeyword) {
-        const keyword = this.data.searchKeyword.toLowerCase()
-        books = books.filter(book => 
-          book.name.toLowerCase().includes(keyword) || 
-          book.author.toLowerCase().includes(keyword)
-        )
+        // 搜索模式
+        console.log('搜索书籍:', this.data.searchKeyword)
+        res = await API.books.searchBooks(this.data.searchKeyword)
+      } else if (this.data.selectedCategoryId) {
+        // 按分类查询
+        console.log('按分类查询:', this.data.selectedCategoryId)
+        res = await API.books.getBooksByCategory(this.data.selectedCategoryId)
+      } else {
+        // 查询所有书籍
+        console.log('查询所有书籍，参数:', {
+          page: this.data.page,
+          size: this.data.pageSize,
+          stockStatus: 'inStock'
+        })
+        res = await API.books.getBookList({
+          page: this.data.page,
+          size: this.data.pageSize,
+          stockStatus: 'inStock'
+        })
       }
       
-      // 排序
-      switch (this.data.sortType) {
-        case 'price_asc':
-          books.sort((a, b) => a.price - b.price)
-          break
-        case 'price_desc':
-          books.sort((a, b) => b.price - a.price)
-          break
-        case 'sales':
-          books.sort((a, b) => b.sales - a.sales)
-          break
-        default:
-          // 默认排序保持原数组顺序
-          break
-      }
+      console.log('书籍列表接口返回:', res)
       
-      this.setData({
-        books,
-        loading: false
-      })
+      if (res.data && res.data.code === 200) {
+        let books = []
+        let hasMore = false
+        
+        // 处理不同接口的返回格式
+        if (res.data.data.records) {
+          // 分页接口返回格式
+          books = res.data.data.records
+          hasMore = this.data.page < res.data.data.pages
+        } else if (Array.isArray(res.data.data)) {
+          // 数组格式返回
+          books = res.data.data
+        }
+        
+        // 处理书籍数据
+        const processedBooks = books.map(book => ({
+          id: book.id,
+          name: book.bookName,
+          author: book.author,
+          price: book.price,
+          imageUrl: book.imageurl,
+          stock: book.stock,
+          category: book.categoryId,
+          // 格式化价格显示（分转元）
+          priceYuan: API.books.priceUtils.fenToYuan(book.price),
+          stockStatus: book.stock > 10 ? '充足' : book.stock > 0 ? '紧张' : '缺货'
+        }))
+        
+        // 本地排序
+        this.sortBooks(processedBooks)
+        
+        this.setData({
+          books: loadMore ? [...this.data.books, ...processedBooks] : processedBooks,
+          loading: false,
+          hasMore
+        })
+      } else {
+        this.setData({
+          books: [],
+          loading: false,
+          hasMore: false
+        })
+      }
       
     } catch (error) {
       console.error('加载书籍失败:', error)
       this.showToast('加载失败')
       this.setData({ loading: false })
+    }
+  },
+
+  /**
+   * 本地排序
+   */
+  sortBooks(books) {
+    switch (this.data.sortType) {
+      case 'price_asc':
+        books.sort((a, b) => a.price - b.price)
+        break
+      case 'price_desc':
+        books.sort((a, b) => b.price - a.price)
+        break
+      default:
+        // 默认排序保持原数组顺序
+        break
     }
   },
 
@@ -241,9 +244,10 @@ Page({
    * 选择分类
    */
   selectCategory(e) {
-    const category = e.currentTarget.dataset.category
+    const { id, name } = e.currentTarget.dataset
     this.setData({
-      selectedCategory: category,
+      selectedCategoryId: id,
+      selectedCategoryName: name,
       showCategoryModal: false
     })
     this.loadBooks()
@@ -262,9 +266,6 @@ Page({
         break
       case 'price_desc':
         sortText = '价格从高到低'
-        break
-      case 'sales':
-        sortText = '销量排序'
         break
     }
     
@@ -310,17 +311,33 @@ Page({
   async addToCart(e) {
     const book = e.currentTarget.dataset.book
     
+    // 检查登录状态
+    const app = getApp()
+    if (!app.checkUserAuth()) {
+      // 未登录，显示登录弹窗
+      app.showLoginDialog(async () => {
+        // 登录成功后执行加入购物车
+        await this.doAddToCart(book)
+      })
+      return
+    }
+    
+    // 已登录，直接加入购物车
+    await this.doAddToCart(book)
+  },
+
+  /**
+   * 执行加入购物车操作
+   */
+  async doAddToCart(book) {
     try {
       const openid = await this.getOpenId()
       
-      const res = await this.request({
-        url: 'cart/add',
-        method: 'POST',
-        data: {
-          openid: openid,
-          bookId: book.id,
-          quantity: 1
-        }
+      // 使用封装的购物车API
+      const res = await API.cart.addToCart({
+        openid: openid,
+        bookId: book.id,
+        quantity: 1
       })
 
       if (res.data && res.data.code === 200) {
@@ -332,6 +349,28 @@ Page({
       console.error('添加购物车失败:', error)
       this.showToast('添加失败')
     }
+  },
+
+  /**
+   * 上拉加载更多
+   */
+  onReachBottom() {
+    if (!this.data.loading && this.data.hasMore) {
+      this.setData({
+        page: this.data.page + 1
+      })
+      this.loadBooks(true)
+    }
+  },
+
+  /**
+   * 下拉刷新
+   */
+  onPullDownRefresh() {
+    this.setData({ page: 1 })
+    this.loadBooks().then(() => {
+      wx.stopPullDownRefresh()
+    })
   },
 
   /**

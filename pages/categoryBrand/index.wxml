@@ -12,7 +12,7 @@
 <!-- 筛选栏 -->
 <view class="filter-container">
   <view class="filter-item" bindtap="showCategoryFilter">
-    <text>分类: {{selectedCategory || '全部'}}</text>
+    <text>分类: {{selectedCategoryName || '全部'}}</text>
     <text class="arrow-down">▼</text>
   </view>
   <view class="filter-item" bindtap="showSortFilter">
@@ -60,17 +60,22 @@
     <text class="close-btn" bindtap="closeCategoryModal">×</text>
   </view>
   <view class="filter-options">
-    <view class="filter-option {{!selectedCategory ? 'active' : ''}}" bindtap="selectCategory" data-category="">
+    <view 
+      class="filter-option {{!selectedCategoryId ? 'active' : ''}}" 
+      bindtap="selectCategory" 
+      data-id="" 
+      data-name="">
       <text>全部</text>
     </view>
     <view 
-      class="filter-option {{selectedCategory === item ? 'active' : ''}}"
+      class="filter-option {{selectedCategoryId === item.id ? 'active' : ''}}"
       wx:for="{{categories}}" 
-      wx:key="*this"
+      wx:key="id"
       bindtap="selectCategory"
-      data-category="{{item}}"
+      data-id="{{item.id}}"
+      data-name="{{item.categoryName}}"
     >
-      <text>{{item}}</text>
+      <text>{{item.categoryName}}</text>
     </view>
   </view>
 </view>

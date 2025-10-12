@@ -5,7 +5,7 @@ App({
    */
   globalData: {
     // API基础地址
-    baseUrl: 'http://localhost:8082/',
+    baseUrl: 'http://localhost:8083/',
     // 用户信息
     userInfo: null,
     // openid
@@ -34,43 +34,189 @@ App({
     // })
     
     // 自动获取用户openid
-    this.getUserOpenId()
+    // this.getUserOpenId()
   },
 
   /**
-   * 获取用户openid - 微信官方方法
+   * 获取用户完整信息（头像+昵称+openid）
    */
-  getUserOpenId() {
+  async getUserCompleteInfo() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log('开始获取用户完整信息')
+        
+        // 1. 先获取用户基本信息
+        const userProfile = await this.getUserProfile()
+        console.log('获取用户基本信息成功:', userProfile)
+        
+        // 2. 获取微信登录code
+        const code = await this.getWxLoginCode()
+        console.log('获取微信登录code成功:', code)
+        
+        // 3. 调用后端获取openid
+        const openid = await this.getOpenIdFromBackend(code)
+        console.log('从后端获取openid成功:', openid)
+        
+        // 4. 组合完整用户信息
+        const completeUserInfo = {
+          ...userProfile,
+          openid: openid
+        }
+        
+        console.log('组合完整用户信息:', completeUserInfo)
+        resolve(completeUserInfo)
+        
+      } catch (error) {
+        console.error('获取用户完整信息失败:', error)
+        reject(error)
+      }
+    })
+  },
+
+  /**
+   * 获取用户基本信息（头像、昵称）
+   */
+  getUserProfile() {
     return new Promise((resolve, reject) => {
-      // 获取code值
+      wx.getUserProfile({
+        desc: '用于完善用户资料',
+        success: (res) => {
+          console.log('getUserProfile成功:', res.userInfo)
+          resolve(res.userInfo)
+        },
+        fail: (error) => {
+          console.error('getUserProfile失败:', error)
+          // 如果获取失败，使用默认用户信息
+          const defaultUserInfo = {
+            nickName: '微信用户',
+            avatarUrl: '',
+            gender: 0,
+            country: '',
+            province: '',
+            city: '',
+            language: ''
+          }
+          console.log('使用默认用户信息:', defaultUserInfo)
+          resolve(defaultUserInfo)
+        }
+      })
+    })
+  },
+
+  /**
+   * 获取微信登录code
+   */
+  getWxLoginCode() {
+    return new Promise((resolve, reject) => {
       wx.login({
         success: (res) => {
-          const code = res.code
-          // 通过code换取openId
-          wx.request({
-            url: `https://api.weixin.qq.com/sns/jscode2session?appid=wx1af9a7ab62196405&secret=112a437a96f4a53a3b9bca32c78fb10f&js_code=${code}&grant_type=authorization_code`,
-            success: (res) => {
-              if (res.data && res.data.openid) {
-                // 将openid存储到globalData中
-                this.globalData.openid = res.data.openid
-                // 同时保存到本地存储，方便下次使用
-                wx.setStorageSync('openid', res.data.openid)
-                console.log('获取openid成功:', res.data.openid)
-                resolve(res.data.openid)
-              } else {
-                console.error('获取openid失败:', res.data)
-                reject(res.data)
-              }
-            },
-            fail: (err) => {
-              console.error('请求失败:', err)
-              reject(err)
+          if (res.code) {
+            console.log('wx.login成功，获取到code:', res.code)
+            resolve(res.code)
+          } else {
+            console.error('wx.login成功但没有code:', res)
+            reject(new Error('获取微信登录code失败'))
+          }
+        },
+        fail: (error) => {
+          console.error('wx.login失败:', error)
+          reject(error)
+        }
+      })
+    })
+  },
+
+  /**
+   * 调用后端获取openid
+   */
+  getOpenIdFromBackend(code) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: this.globalData.baseUrl + 'admin/getOpenId',
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json'
+        },
+        data: {code: code},
+        success: (result) => {
+          console.log('后端获取openid响应:', result)
+          if (result.data && result.data.code === 200) {
+            const openid = result.data.data
+            console.log('后端返回openid:', openid)
+            
+            // 保存openid到本地和全局
+            wx.setStorageSync('openid', openid)
+            this.globalData.openid = openid
+            
+            resolve(openid)
+          } else {
+            console.error('后端获取openid失败:', result.data)
+            reject(new Error(result.data ? result.data.message : '获取openid失败'))
+          }
+        },
+        fail: (error) => {
+          console.error('调用后端获取openid失败:', error)
+          reject(error)
+        }
+      })
+    })
+  },
+
+  /**
+   * 保存用户信息到后端
+   */
+  saveUserToBackend(userInfo) {
+    return new Promise((resolve, reject) => {
+      const userData = {
+        userName: userInfo.nickName || userInfo.nickname || '微信用户',
+        avatarUrl: userInfo.avatarUrl || userInfo.avatar || '',
+        openid: userInfo.openid || ''
+      }
+
+      console.log('准备保存用户信息到后端:', userData)
+
+      // 调用 admin/register 接口
+      wx.request({
+        url: this.globalData.baseUrl + 'admin/register',
+        method: 'POST',
+        data: userData,
+        header: {
+          'Content-Type': 'application/json'
+        },
+        success: (result) => {
+          console.log('保存用户信息成功:', result)
+          if (result.data && result.data.code === 200) {
+            // 保存完整的用户信息到本地
+            const completeUserInfo = {
+              ...userInfo,
+              userId: result.data.data ? result.data.data.userId : Date.now()
             }
-          })
+            wx.setStorageSync('userInfo', completeUserInfo)
+            this.globalData.userInfo = completeUserInfo
+            
+            // 通知监听器
+            this.notifyLoginListeners(completeUserInfo)
+            resolve(completeUserInfo)
+          } else {
+            reject(new Error(result.data ? result.data.msg : '保存用户信息失败'))
+          }
         },
         fail: (err) => {
-          console.error('登录失败:', err)
-          reject(err)
+          console.error('保存用户信息失败:', err)
+          // 即使后端保存失败，也保存到本地
+          const completeUserInfo = {
+            ...userInfo,
+            userId: Date.now() // 临时ID
+          }
+          wx.setStorageSync('userInfo', completeUserInfo)
+          this.globalData.userInfo = completeUserInfo
+          this.notifyLoginListeners(completeUserInfo)
+          
+          wx.showToast({
+            title: '网络错误，数据已本地保存',
+            icon: 'none'
+          })
+          resolve(completeUserInfo)
         }
       })
     })
@@ -126,24 +272,64 @@ App({
   checkUserAuth() {
     const userInfo = wx.getStorageSync('userInfo')
     const openid = this.globalData.openid || wx.getStorageSync('openid')
-    return !!(userInfo && userInfo.userId && openid)
+    return !!(userInfo && openid)
   },
   
   /**
-   * 显示未授权提示并跳转到首页
+   * 通知所有登录监听器
    */
-  showAuthRequiredDialog() {
-    wx.showModal({
-      title: '需要授权',
-      content: '请先在首页完成授权后再使用此功能',
-      showCancel: false,
-      confirmText: '去授权',
-      success: () => {
-        wx.switchTab({
-          url: '/pages/index/index'
+  notifyLoginListeners(userInfo) {
+    this.globalData.loginListeners.forEach(listener => {
+      if (typeof listener === 'function') {
+        listener(userInfo)
+      }
+    })
+  },
+
+  /**
+   * 显示登录弹窗
+   * @param {Function} successCallback - 登录成功回调
+   * @param {Function} cancelCallback - 取消登录回调
+   */
+  showLoginDialog(successCallback, cancelCallback) {
+    // 保存回调函数到全局，供登录页面使用
+    this.globalData.loginSuccessCallback = successCallback
+    this.globalData.loginCancelCallback = cancelCallback
+    
+    // 跳转到登录页面
+    wx.navigateTo({
+      url: '/pages/login/index',
+      fail: (err) => {
+        console.error('跳转登录页面失败:', err)
+        // 如果跳转失败，显示简单提示
+        wx.showModal({
+          title: '需要登录',
+          content: '此功能需要登录',
+          showCancel: false
         })
       }
     })
+  },
+
+  /**
+   * 检查登录状态，未登录则显示登录弹窗
+   * @param {Function} successCallback - 登录成功或已登录的回调
+   * @param {Function} cancelCallback - 取消登录的回调
+   * @returns {Boolean} 是否已登录
+   */
+  checkLoginAndShow(successCallback, cancelCallback) {
+    if (this.checkUserAuth()) {
+      // 已登录，直接执行成功回调
+      const userInfo = wx.getStorageSync('userInfo')
+      if (successCallback && typeof successCallback === 'function') {
+        successCallback(userInfo)
+      }
+      return true
+    } else {
+      // 未登录，显示登录弹窗
+      this.showLoginDialog(successCallback, cancelCallback)
+      return false
+    }
   },
 
   /**

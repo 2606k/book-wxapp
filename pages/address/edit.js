@@ -1,4 +1,6 @@
 // pages/address/edit.js
+const API = require('../../utils/api/index.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -29,7 +31,7 @@ Page({
           name: address.name,
           phone: address.phone,
           address: address.address,
-          isDefault: address.isDefault
+          isDefault: address.isDefault || false
         },
         isEdit: true,
         addressId: address.id
@@ -43,14 +45,6 @@ Page({
         title: '添加地址'
       })
     }
-  },
-
-  /**
-   * 网络请求封装
-   */
-  request(options) {
-    const app = getApp()
-    return app.request(options)
   },
 
   /**
@@ -100,24 +94,19 @@ Page({
   async saveAddress() {
     const { formData, isEdit, addressId } = this.data
     
-    // 表单验证
-    if (!formData.name.trim()) {
-      this.showToast('请输入收货人姓名')
+    // 使用工具函数进行表单验证
+    if (!API.address.addressUtils.validateName(formData.name)) {
+      this.showToast('请输入正确的收货人姓名（2-20个字符）')
       return
     }
     
-    if (!formData.phone.trim()) {
-      this.showToast('请输入手机号')
-      return
-    }
-    
-    if (!/^1[3-9]\d{9}$/.test(formData.phone)) {
+    if (!API.address.addressUtils.validatePhone(formData.phone)) {
       this.showToast('请输入正确的手机号')
       return
     }
     
-    if (!formData.address.trim()) {
-      this.showToast('请输入详细地址')
+    if (!API.address.addressUtils.validateAddress(formData.address)) {
+      this.showToast('请输入详细地址（至少5个字符）')
       return
     }
     
@@ -129,30 +118,26 @@ Page({
         openid: openid
       }
       
+      let res
       if (isEdit) {
-        // 编辑地址 - 这里应该调用编辑接口
-        console.log('编辑地址:', addressData)
-        this.showToast('保存成功')
+        // 编辑地址 - 使用封装的API
+        addressData.id = addressId
+        res = await API.address.updateAddress(addressData)
       } else {
-        // 添加地址
-        const res = await this.request({
-          url: 'address/add',
-          method: 'POST',
-          data: addressData
-        })
-        
-        if (res.data && res.data.code === 200) {
-          this.showToast('添加成功')
-        } else {
-          this.showToast(res.data.msg || '添加失败')
-          return
-        }
+        // 添加地址 - 使用封装的API
+        res = await API.address.addAddress(addressData)
       }
       
-      // 返回上一页
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1500)
+      if (res.data && res.data.code === 200) {
+        this.showToast(isEdit ? '修改成功' : '添加成功')
+        
+        // 返回上一页
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 1500)
+      } else {
+        this.showToast(res.data?.msg || '操作失败')
+      }
       
     } catch (error) {
       console.error('保存地址失败:', error)

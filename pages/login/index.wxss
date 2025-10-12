@@ -1,83 +1,294 @@
 /* pages/login/index.wxss */
-/* ---弹窗css--- */
-.modal-mask {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #000;
-  opacity: 0.5;
-  overflow: hidden;
-  color: #fff;
-}
-.modal-dialog {
-  width: 72%;
-  position: absolute;
-  top: 30%;
-  left: 14%;
-  background: #fff;
-  border-radius: 12rpx;
-}
-.modal-content{
-  text-align: center;
-}
-.modal-content .show{
-  width: 450rpx;
-  height: 323rpx;
-  display: block;
-  margin: 0 auto;
-  margin-top: -118rpx;
-  z-index: 10000;
-}
-.iconWx{
-  width:52rpx;
-  height: 41rpx;
-  padding-right: 20rpx;
-}
-.iconPhone{
-  width:56rpx;
-  height: 56rpx;
-  padding-right: 15rpx;
-}
-.modal-content view:nth-of-type(2){
-  font-size: 38rpx;
-  color: #333333;
-  line-height: 1;
-}
-.modal-content view:nth-of-type(3){
-  font-size: 26rpx;
-  color: #9c9c9c;
-  margin: 18rpx 0 29rpx;
-  line-height: 1;
-}
-.modal-content button:nth-of-type(1){
-  width: 80%;
-  height: 80rpx;
-  border-radius: 60rpx;
-  margin: 0 auto 80rpx;
-  font-size: 30rpx;
-  color: #fff;
-  background: #31cc32;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 60rpx 40rpx;
   box-sizing: border-box;
 }
-.modal-content button:nth-of-type(1)::after{
-  border: none;
-}
-.modal-content  .wxLogin{
-  font-size: 26rpx;
-  color: #424242;
+
+/* 顶部区域 */
+.login-header {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background-color: #fff;
+  margin-bottom: 40rpx;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  line-height: 40rpx;
+  padding: 0 40rpx;
+}
+
+/* 表单容器 */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+/* 表单项 */
+.form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: 500;
+  padding-left: 8rpx;
+}
+
+/* 头像选择器 */
+.avatar-picker {
+  width: 100%;
+  height: 280rpx;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin: 38rpx 0 80rpx;
 }
-button::after{
+
+.avatar-picker::after {
   border: none;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  gap: 16rpx;
+}
+
+.tip-icon {
+  font-size: 80rpx;
+}
+
+.tip-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.avatar-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.avatar-picker:active .avatar-mask {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.change-text {
+  font-size: 32rpx;
+  color: #fff;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.avatar-picker:active .change-text {
+  opacity: 1;
+}
+
+/* 昵称输入区域 */
+.nickname-input-wrapper {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16rpx;
+  padding: 28rpx 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.nickname-input {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+  height: 44rpx;
+  line-height: 44rpx;
+}
+
+.placeholder {
+  color: #999;
+}
+
+.input-count {
+  font-size: 24rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+/* 用户预览 */
+.user-preview {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.preview-label {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.preview-label .icon {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background-color: #07c160;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #fff;
+}
+
+.preview-card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.preview-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.preview-nickname {
+  flex: 1;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 按钮基础样式 */
+button {
+  border: none;
+  outline: none;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  padding: 28rpx 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  margin: 0;
+}
+
+button::after {
+  border: none;
+}
+
+/* 登录按钮 */
+.login-btn {
+  background-color: #fff;
+  color: #667eea;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  font-size: 34rpx;
+  margin-top: 16rpx;
+}
+
+.login-btn.active {
+  background-color: #fff;
+  color: #667eea;
+}
+
+.login-btn.disabled {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #999;
+  box-shadow: none;
+}
+
+.login-btn:active:not([disabled]) {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 取消按钮 */
+.cancel-btn {
+  background-color: transparent;
+  color: #fff;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  font-size: 30rpx;
+}
+
+.cancel-btn:active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 说明文字 */
+.tips {
+  margin-top: 60rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.tip-text {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  line-height: 36rpx;
 }

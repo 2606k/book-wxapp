@@ -1,0 +1,111 @@
+<!--pages/book/detail.wxml-->
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 书籍详情 -->
+  <view class="book-detail" wx:if="{{!loading && book}}">
+    <!-- 书籍封面和基本信息 -->
+    <view class="book-header">
+      <view class="book-cover" bindtap="previewImage">
+        <image src="{{book.imageUrl}}" mode="aspectFit"></image>
+        <view class="preview-tip">点击查看大图</view>
+      </view>
+      <view class="book-info">
+        <view class="book-name">{{book.name}}</view>
+        <view class="book-author">作者：{{book.author || '未知'}}</view>
+        <view class="book-publisher">出版社：{{book.publisher || '未知'}}</view>
+        <view class="book-price">
+          <text class="price-symbol">¥</text>
+          <text class="price-value">{{book.price / 100}}</text>
+          <text class="price-original" wx:if="{{book.originalPrice && book.originalPrice > book.price}}">
+            ¥{{book.originalPrice / 100}}
+          </text>
+        </view>
+        <view class="book-stock">
+          <text wx:if="{{book.stock > 0}}">库存：{{book.stock}} 本</text>
+          <text wx:else class="out-of-stock">已售罄</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 书籍详细信息 -->
+    <view class="book-details-section">
+      <view class="section-title">图书详情</view>
+      
+      <view class="detail-item">
+        <text class="label">ISBN：</text>
+        <text class="value">{{book.isbn || '暂无'}}</text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="label">分类：</text>
+        <text class="value">{{book.categoryName || '未分类'}}</text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="label">出版日期：</text>
+        <text class="value">{{book.publishDate || '暂无'}}</text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="label">页数：</text>
+        <text class="value">{{book.pages || '暂无'}} 页</text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="label">语言：</text>
+        <text class="value">{{book.language || '中文'}}</text>
+      </view>
+    </view>
+
+    <!-- 书籍简介 -->
+    <view class="book-description-section" wx:if="{{book.description}}">
+      <view class="section-title">内容简介</view>
+      <view class="description-content">{{book.description}}</view>
+    </view>
+
+    <!-- 占位，避免底部按钮遮挡内容 -->
+    <view class="bottom-placeholder"></view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar" wx:if="{{!loading && book}}">
+    <view class="bar-left">
+      <view class="bar-btn" bindtap="goHome">
+        <text class="iconfont">🏠</text>
+        <text class="btn-text">首页</text>
+      </view>
+      <view class="bar-btn" bindtap="goToCart">
+        <text class="iconfont">🛒</text>
+        <text class="btn-text">购物车</text>
+      </view>
+    </view>
+    
+    <view class="bar-right" wx:if="{{book.stock > 0}}">
+      <!-- 数量选择 -->
+      <view class="quantity-selector">
+        <view class="quantity-btn" bindtap="decreaseQuantity">-</view>
+        <input class="quantity-input" type="number" value="{{quantity}}" bindinput="onQuantityInput"/>
+        <view class="quantity-btn" bindtap="increaseQuantity">+</view>
+      </view>
+      
+      <!-- 加入购物车 -->
+      <view class="action-btn cart-btn" bindtap="addToCart">
+        <text>购物车</text>
+      </view>
+      
+      <!-- 立即购买 -->
+      <view class="action-btn buy-btn" bindtap="buyNow">
+        <text>购买</text>
+      </view>
+    </view>
+    
+    <view class="bar-right out-of-stock-bar" wx:else>
+      <text>暂时缺货</text>
+    </view>
+  </view>
+</view>
+

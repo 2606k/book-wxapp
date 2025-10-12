@@ -1,4 +1,6 @@
 // pages/home/index.js
+const API = require('../../utils/api/index.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -8,6 +10,8 @@ Page({
     recommendBooks: [],
     // 新书上架列表
     newBooks: [],
+    // 分类列表
+    categories: [],
     // 加载状态
     loading: false
   },
@@ -16,15 +20,43 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.loadCategories()
     this.loadBookData()
   },
 
   /**
-   * 网络请求封装
+   * 加载分类列表
    */
-  request(options) {
-    const app = getApp()
-    return app.request(options)
+  async loadCategories() {
+    try {
+      const res = await API.categories.getCategoryList()
+      
+      if (res.data && res.data.code === 200) {
+        // 获取所有分类数据（分页格式）
+        let categoriesData = []
+        
+        if (res.data.data.records) {
+          // 如果是分页格式
+          categoriesData = res.data.data.records
+        } else if (Array.isArray(res.data.data)) {
+          // 如果是数组格式
+          categoriesData = res.data.data
+        }
+        
+        // 映射字段名：servicetypeid -> id, name -> categoryName
+        const categories = categoriesData.map(cat => ({
+          id: cat.servicetypeid || cat.id,
+          categoryName: cat.name || cat.categoryName,
+          imageUrl: cat.imageurl || cat.imageUrl,
+          createdat: cat.createdat
+        }))
+        
+        console.log('处理后的分类数据:', categories)
+        this.setData({ categories })
+      }
+    } catch (error) {
+      console.error('加载分类失败:', error)
+    }
   },
 
   /**
@@ -34,67 +66,52 @@ Page({
     try {
       this.setData({ loading: true })
       
-      // 加载推荐书籍和新书 - 使用测试数据
-      const recommendBooks = [
-        {
-          id: 1,
-          name: 'JavaScript高级程序设计',
-          author: 'Nicholas C. Zakas',
-          price: 8900,
-          imageUrl: 'https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01Z5n8yI1L3Q8ZYqo3I_!!2206678097909-0-cib.jpg'
-        },
-        {
-          id: 2, 
-          name: 'Java核心技术',
-          author: 'Cay S. Horstmann',
-          price: 12800,
-          imageUrl: 'https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01lNqX3A1L3Q8aGpaBK_!!2206678097909-0-cib.jpg'
-        },
-        {
-          id: 3,
-          name: 'Spring实战',
-          author: 'Craig Walls',
-          price: 7900,
-          imageUrl: 'https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01N2mYeP1L3Q8a6j5wn_!!2206678097909-0-cib.jpg'
-        }
-      ]
-
-      const newBooks = [
-        {
-          id: 4,
-          name: 'Vue.js设计与实现',
-          author: '霍春阳',
-          price: 9900,
-          imageUrl: 'https://img.alicdn.com/imgextra/i1/2206678097909/O1CN01v5J5J61L3Q8XpGqv7_!!2206678097909-0-cib.jpg'
-        },
-        {
-          id: 5,
-          name: 'React进阶实践指南',
-          author: '我不是外星人',
-          price: 8900,
-          imageUrl: 'https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01fX9nZy1L3Q8XpGt0k_!!2206678097909-0-cib.jpg'
-        },
-        {
-          id: 6,
-          name: 'TypeScript编程',
-          author: 'Boris Cherny',
-          price: 11900,
-          imageUrl: 'https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01ZqsXNd1L3Q8ZYqkLh_!!2206678097909-0-cib.jpg'
-        },
-        {
-          id: 7,
-          name: 'Node.js开发实战',
-          author: '朴灵',
-          price: 7900,
-          imageUrl: 'https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01VhX5oo1L3Q8Y3zRdE_!!2206678097909-0-cib.jpg'
-        }
-      ]
-
-      this.setData({
-        recommendBooks,
-        newBooks,
-        loading: false
+      // 加载推荐书籍（获取前6本书籍）
+      const recommendRes = await API.books.getBookList({
+        page: 1,
+        size: 6,
+        stockStatus: 'inStock' // 只显示有库存的
       })
+
+      // 加载新书（按创建时间倒序，获取前4本）
+      const newBooksRes = await API.books.getBookList({
+        page: 1,
+        size: 4,
+        stockStatus: 'inStock'
+      })
+
+      if (recommendRes.data && recommendRes.data.code === 200) {
+        // 处理推荐书籍数据
+        const recommendBooks = recommendRes.data.data.records.map(book => ({
+          id: book.id,
+          name: book.bookName,
+          author: book.author,
+          price: book.price,
+          imageUrl: book.imageurl,
+          // 格式化价格显示（分转元）
+          priceYuan: API.books.priceUtils.fenToYuan(book.price),
+          stock: book.stock
+        }))
+
+        this.setData({ recommendBooks })
+      }
+
+      if (newBooksRes.data && newBooksRes.data.code === 200) {
+        // 处理新书数据
+        const newBooks = newBooksRes.data.data.records.map(book => ({
+          id: book.id,
+          name: book.bookName,
+          author: book.author,
+          price: book.price,
+          imageUrl: book.imageurl,
+          priceYuan: API.books.priceUtils.fenToYuan(book.price),
+          stock: book.stock
+        }))
+
+        this.setData({ newBooks })
+      }
+
+      this.setData({ loading: false })
 
     } catch (error) {
       console.error('加载书籍数据失败:', error)
@@ -116,9 +133,9 @@ Page({
    * 跳转到分类页面
    */
   goToCategory(e) {
-    const category = e.currentTarget.dataset.category
+    const { id, name } = e.currentTarget.dataset
     wx.navigateTo({
-      url: `/pages/categoryBrand/index?category=${category}`
+      url: `/pages/categoryBrand/index?categoryId=${id}&categoryName=${encodeURIComponent(name)}`
     })
   },
 
@@ -138,17 +155,33 @@ Page({
   async addToCart(e) {
     const book = e.currentTarget.dataset.book
     
+    // 检查登录状态
+    const app = getApp()
+    if (!app.checkUserAuth()) {
+      // 未登录，显示登录弹窗
+      app.showLoginDialog(async () => {
+        // 登录成功后执行加入购物车
+        await this.doAddToCart(book)
+      })
+      return
+    }
+    
+    // 已登录，直接加入购物车
+    await this.doAddToCart(book)
+  },
+
+  /**
+   * 执行加入购物车操作
+   */
+  async doAddToCart(book) {
     try {
       const openid = await this.getOpenId()
       
-      const res = await this.request({
-        url: 'cart/add',
-        method: 'POST',
-        data: {
-          openid: openid,
-          bookId: book.id,
-          quantity: 1
-        }
+      // 使用封装的购物车API
+      const res = await API.cart.addToCart({
+        openid: openid,
+        bookId: book.id,
+        quantity: 1
       })
 
       if (res.data && res.data.code === 200) {

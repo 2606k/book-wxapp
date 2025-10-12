@@ -1,252 +1,211 @@
+// pages/login/index.js
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-     openid: "",
-    loginstate: "0",
-    openid: "",
-    userEntity: null,
-    terminal: "",
-    osVersion: "",
-     phoneNumber: "",
-    showModal: false,//定义登录弹窗
+    avatarUrl: '', // 用户头像
+    nickName: '', // 用户昵称
+    isLoading: false // 加载状态
   },
-  //在页面加载的时候，判断缓存中是否有内容，如果有，存入到对应的字段里
-  onLoad: function () {
-    var that = this;
-    wx.getStorage({
-      key: 'openid',
-      success: function (res) {
-        that.setData({ openid: res.data });
-      },
-      fail: function (res) {
-        // that.getcode();
-      }
-    });
-    wx.getStorage({
-      key: 'userEntity',
-      success: function (res) {
-        that.setData({ userEntity: res.data });
-      },
-      fail: function (res) {
-        console.log("fail1");
-      }
-    });
-    wx.getStorage({
-      key: 'loginstate',
-      success: function (res) {
-        that.setData({ loginstate: res.data });
-      }, fail: function (res) {
-        console.log("fail2");
-      }
-    });
-  },
-  // 获取用户信息 存储到 storage中
-  onGotUserInfo: function (e) {
-    console.log(e)
-    var that = this;
-    if (e.detail.errMsg == "getUserInfo:ok") {
-      wx.setStorage({
-        key: "userinfo",
-        data: e.detail.userInfo
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad(options) {
+    console.log('登录页面加载')
+    // 检查是否已有用户信息
+    const userInfo = wx.getStorageSync('userInfo')
+    if (userInfo && userInfo.nickName && userInfo.avatarUrl) {
+      this.setData({
+        avatarUrl: userInfo.avatarUrl,
+        nickName: userInfo.nickName
       })
-      this.setData({ userInfo: e.detail.userInfo });
-      that.showDialogBtn();//调用一键获取手机号弹窗（自己写的）
     }
   },
-  // 显示一键获取手机号弹窗
-  showDialogBtn: function () {
+
+  /**
+   * 选择头像回调
+   */
+  onChooseAvatar(e) {
+    console.log('选择头像:', e.detail.avatarUrl)
+    const { avatarUrl } = e.detail
+    
     this.setData({
-      showModal: true//修改弹窗状态为true，即显示
+      avatarUrl: avatarUrl
+    })
+    
+    wx.showToast({
+      title: '头像已选择',
+      icon: 'success',
+      duration: 1500
     })
   },
-  // 隐藏一键获取手机号弹窗
-  hideModal: function () {
+
+  /**
+   * 昵称输入
+   */
+  onNicknameInput(e) {
     this.setData({
-      showModal: false//修改弹窗状态为false,即隐藏
-    });
-  },
-  onshow: function (openid, userInfo, phoneNumber) {
-    var that = this;
-    wx.getSystemInfo({
-      success: function (res) {
-        that.setData({ terminal: res.model });
-        that.setData({ osVersion: res.system });
-      }
-    })
-    wx.request({
-      url: '登录接口',
-      method: 'POST',
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      data: {
-        username: phoneNumber,
-        parentuser: 'xudeihai',
-        wximg: userInfo.avatarUrl,
-        nickname: userInfo.nickName,
-        identity: "",
-        terminal: that.data.terminal,
-        osVersion: that.data.system,
-        logintype: "10",//微信登录
-        openid: that.data.openid,
-      },
-      success(res) {
-        if (res.data.r == "T") {
-          that.setData({ userEntity: res.data.d });
-          wx.setStorage({
-            key: "userEntity",
-            data: res.data.d
-          })
-          that.setData({ loginstate: "1" });
-          wx.setStorage({
-            key: "loginstate",
-            data: "1"
-          })
-          wx.setStorage({
-            key: 'userinfo',
-            data: "1"
-          })
-        }
-        else {
-          return;
-        }
-      },
-      fail(res) {
-        console.log(res);
-      }
+      nickName: e.detail.value
     })
   },
-  //绑定手机
-  getPhoneNumber: function (e) {
-    console.log(e)
-    var that = this;
-    that.hideModal();
-    // 检查登录态是否过期。
-    wx.checkSession({
-      //session_key 未过期，并且在本生命周期一直有效
-      success: function () {
-        wx.login({
-          success: res => {
-            wx.request({
-              url: '自己的登录接口', //仅为示例，并非真实的接口地址
-              data: {
-                account: '1514382701',
-                jscode: res.code
-              },
-              method: "POST",
-              header: {
-                'content-type': 'application/json' // 默认值
-              },
-              success(res) {
-                if (res.data.r == "T") {
-                  const openid = res.data.openid;
-                  
-                  // 更新全局openid并通知其他页面
-                  const app = getApp()
-                  app.updateOpenid(openid)
-                  
-                  wx.setStorage({
-                    key: "openid",
-                    data: openid
-                  })
-                  wx.setStorage({
-                    key: "sessionkey",
-                    data: res.data.sessionkey
-                  })
-                  wx.setStorageSync("sessionkey", res.data.sessionkey);
-                  wx.request({
-                    url: '自己的解密接口',//自己的解密地址
-                    data: {
-                      encryptedData: e.detail.encryptedData,
-                      iv: e.detail.iv,
-                      code: wx.getStorageSync("sessionkey")
-                    },
-                    method: "post",
-                    header: {
-                      'content-type': 'application/json'
-                    },
-                    success: function (res) {
-                      if (res.data.r == "T") {
-                        that.onshow(openid, that.data.userInfo, res.data.d.phoneNumber);//调用onshow方法，并传递三个参数
-                        console.log("登录成功")
-                        console.log(res.data.d.phoneNumber)//成功后打印微信手机号
-                        
-                        // 登录成功后返回上一页
-                        wx.navigateBack({
-                          delta: 1
-                        })
-                      }
-                      else {
-                        console.log(res);
-                      }
-                    }
-                  })
-                }
-              }
-            })
-          }
+
+  /**
+   * 昵称失焦（微信会异步检测内容安全）
+   */
+  onNicknameBlur(e) {
+    console.log('昵称失焦:', e.detail.value)
+    // 微信会自动进行内容安全检测
+    // 如果检测不通过，微信会自动清空内容
+  },
+
+  /**
+   * 表单提交 - 点击登录按钮
+   */
+  async handleLogin(e) {
+    console.log('表单提交:', e.detail.value)
+    
+    // 从表单获取昵称（更安全）
+    const formNickname = e.detail.value.nickname
+    
+    // 验证信息完整性
+    if (!this.data.avatarUrl) {
+      wx.showToast({
+        title: '请选择头像',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
+    if (!formNickname || formNickname.trim() === '') {
+      wx.showToast({
+        title: '请输入昵称',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
+    this.setData({ isLoading: true })
+
+    try {
+      const app = getApp()
+      
+      // 1. 上传头像到服务器（如果需要）
+      console.log('准备上传头像...')
+      let uploadedAvatarUrl = this.data.avatarUrl
+      
+      // 如果头像是本地临时路径，需要上传到服务器
+      if (this.data.avatarUrl.indexOf('tmp') !== -1) {
+        uploadedAvatarUrl = await this.uploadAvatar(this.data.avatarUrl)
+      }
+      
+      // 2. 获取微信登录 code
+      console.log('开始获取微信登录code...')
+      const code = await app.getWxLoginCode()
+      console.log('获取code成功:', code)
+      
+      // 3. 调用后端获取 openid
+      console.log('开始获取openid...')
+      const openid = await app.getOpenIdFromBackend(code)
+      console.log('获取openid成功:', openid)
+      
+      // 4. 组合完整的用户信息
+      const completeUserInfo = {
+        nickName: formNickname.trim(),
+        avatarUrl: uploadedAvatarUrl,
+        openid: openid
+      }
+      console.log('组合完整用户信息:', completeUserInfo)
+      
+      // 5. 调用后端注册接口保存用户信息
+      console.log('开始保存用户信息到后端...')
+      const savedUserInfo = await app.saveUserToBackend(completeUserInfo)
+      console.log('保存用户信息成功:', savedUserInfo)
+      
+      // 6. 显示成功提示
+      wx.showToast({
+        title: '登录成功',
+        icon: 'success',
+        duration: 1500
+      })
+      
+      // 7. 执行成功回调
+      if (app.globalData.loginSuccessCallback && typeof app.globalData.loginSuccessCallback === 'function') {
+        app.globalData.loginSuccessCallback(savedUserInfo)
+      }
+      
+      // 8. 延迟返回上一页
+      setTimeout(() => {
+        wx.navigateBack({
+          delta: 1
         })
-      },
-      // session_key 已经失效，需要重新执行登录流程
-      fail: function () {
-        wx.login({
-          success: res => {
-            wx.request({
-              url: '自己的登录接口', //仅为示例，并非真实的接口地址
-              data: {
-                account: '1514382701',
-                jscode: res.code
-              },
-              method: "POST",
-              header: {
-                'content-type': 'application/json'
-              },
-              success(res) {
-                if (res.data.r == "T") {
-                  const openid = res.data.openid;
-                  
-                  // 更新全局openid并通知其他页面
-                  const app = getApp()
-                  app.updateOpenid(openid)
-                  
-                  wx.setStorage({
-                    key: "openid",
-                    data: openid
-                  })
-                  wx.setStorage({
-                    key: "sessionkey",
-                    data: res.data.sessionkey
-                  })
-                  wx.request({
-                    url: '自己的解密接口',//自己的解密地址
-                    data: {
-                      encryptedData: e.detail.encryptedData,
-                      iv: e.detail.iv,
-                      code: res.data.sessionkey
-                    },
-                    method: "post",
-                    header: {
-                      'content-type': 'application/json'
-                    },
-                    success: function (res) {
-                      if (res.data.r == "T") {
-                        that.onshow(openid, that.data.userInfo, res.data.d.phoneNumber);//调用onshow方法，并传递三个参数
-                        
-                        // 登录成功后返回上一页
-                        wx.navigateBack({
-                          delta: 1
-                        })
-                      }
-                    }
-                  })
-                }
-              }
-            })
+      }, 1500)
+      
+    } catch (error) {
+      console.error('登录失败:', error)
+      
+      this.setData({ isLoading: false })
+      
+      wx.showModal({
+        title: '登录失败',
+        content: error.message || '登录过程中出现错误，请重试',
+        showCancel: false,
+        confirmText: '我知道了'
+      })
+    }
+  },
+
+  /**
+   * 上传头像到服务器
+   */
+  uploadAvatar(tempFilePath) {
+    return new Promise((resolve, reject) => {
+      const app = getApp()
+      
+      wx.uploadFile({
+        url: app.globalData.baseUrl + 'admin/upload/avatar',
+        filePath: tempFilePath,
+        name: 'file',
+        header: {
+          'Content-Type': 'multipart/form-data'
+        },
+        success: (res) => {
+          console.log('头像上传成功:', res)
+          const data = JSON.parse(res.data)
+          if (data.code === 200) {
+            resolve(data.data) // 返回服务器上的头像URL
+          } else {
+            // 上传失败，使用临时路径
+            console.warn('头像上传失败，使用临时路径')
+            resolve(tempFilePath)
           }
-        })
-      }
+        },
+        fail: (err) => {
+          console.error('头像上传失败:', err)
+          // 上传失败，使用临时路径
+          resolve(tempFilePath)
+        }
+      })
     })
   },
+
+  /**
+   * 取消登录
+   */
+  handleCancel() {
+    const app = getApp()
+    
+    // 执行取消回调
+    if (app.globalData.loginCancelCallback && typeof app.globalData.loginCancelCallback === 'function') {
+      app.globalData.loginCancelCallback()
+    }
+    
+    // 返回上一页
+    wx.navigateBack({
+      delta: 1
+    })
+  }
 })

@@ -1,4 +1,6 @@
 // pages/cart/index.js
+const API = require('../../utils/api/index.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -22,22 +24,31 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.loadCartData()
+    // 检查登录状态
+    const app = getApp()
+    if (!app.checkUserAuth()) {
+      // 未登录，显示登录弹窗
+      app.showLoginDialog(() => {
+        // 登录成功后加载购物车
+        this.loadCartData()
+      }, () => {
+        // 取消登录，返回上一页
+        wx.navigateBack()
+      })
+    } else {
+      this.loadCartData()
+    }
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    this.loadCartData()
-  },
-
-  /**
-   * 网络请求封装
-   */
-  request(options) {
+    // 检查登录状态
     const app = getApp()
-    return app.request(options)
+    if (app.checkUserAuth()) {
+      this.loadCartData()
+    }
   },
 
   /**
@@ -49,59 +60,28 @@ Page({
       
       const openid = await this.getOpenId()
       
-      // 调用购物车列表接口
-      const res = await this.request({
-        url: `cart/list?openid=${openid}`,
-        method: 'GET'
-      })
+      // 使用封装的购物车API
+      const res = await API.cart.getCartList(openid)
 
       if (res.data && res.data.code === 200) {
         const cartItems = res.data.data || []
+        
+        // 处理数据，添加格式化后的价格
+        const processedItems = cartItems.map(item => ({
+          ...item,
+          priceYuan: API.cart.cartUtils.formatPrice(item.price)
+        }))
+        
         this.setData({
-          cartItems,
+          cartItems: processedItems,
           loading: false
         })
         this.calculateTotal()
       } else {
-        // 使用测试数据
-        const testCartItems = [
-          {
-            id: 1,
-            openid: 'test_openid',
-            bookId: 1,
-            bookName: 'JavaScript高级程序设计',
-            price: 8900,
-            imageUrl: 'https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01Z5n8yI1L3Q8ZYqo3I_!!2206678097909-0-cib.jpg',
-            quantity: 2,
-            selected: true
-          },
-          {
-            id: 2,
-            openid: 'test_openid',
-            bookId: 2,
-            bookName: 'Java核心技术',
-            price: 12800,
-            imageUrl: 'https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01lNqX3A1L3Q8aGpaBK_!!2206678097909-0-cib.jpg',
-            quantity: 1,
-            selected: false
-          },
-          {
-            id: 3,
-            openid: 'test_openid',
-            bookId: 3,
-            bookName: 'Spring实战',
-            price: 7900,
-            imageUrl: 'https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01N2mYeP1L3Q8a6j5wn_!!2206678097909-0-cib.jpg',
-            quantity: 1,
-            selected: true
-          }
-        ]
-        
         this.setData({
-          cartItems: testCartItems,
+          cartItems: [],
           loading: false
         })
-        this.calculateTotal()
       }
       
     } catch (error) {
@@ -116,22 +96,17 @@ Page({
    */
   calculateTotal() {
     const { cartItems } = this.data
-    let totalAmount = 0
-    let totalCount = 0
-    let selectedCount = 0
     
-    cartItems.forEach(item => {
-      if (item.selected) {
-        totalAmount += item.price * item.quantity
-        totalCount += item.quantity
-        selectedCount++
-      }
-    })
+    // 使用工具函数计算总价和总数量
+    const totalAmount = API.cart.cartUtils.calculateTotal(cartItems, true)
+    const totalCount = API.cart.cartUtils.calculateTotalQuantity(cartItems, true)
     
+    // 检查是否全选
+    const selectedCount = cartItems.filter(item => item.selected).length
     const selectAll = selectedCount === cartItems.length && cartItems.length > 0
     
     this.setData({
-      totalAmount,
+      totalAmount: API.cart.cartUtils.formatPrice(totalAmount),
       totalCount,
       selectAll
     })
@@ -148,12 +123,9 @@ Page({
     this.setData({ cartItems })
     this.calculateTotal()
     
-    // 调用接口更新选中状态
+    // 使用封装的API更新选中状态
     try {
-      await this.request({
-        url: `cart/select/${cartItems[index].id}?selected=${cartItems[index].selected}`,
-        method: 'PUT'
-      })
+      await API.cart.selectCartItem(cartItems[index].id, cartItems[index].selected)
     } catch (error) {
       console.error('更新选中状态失败:', error)
     }
@@ -177,16 +149,12 @@ Page({
     })
     this.calculateTotal()
     
-    // 调用接口批量更新选中状态
+    // 使用封装的API批量更新选中状态
     try {
       const cartIds = cartItems.map(item => item.id)
-      await this.request({
-        url: 'cart/select',
-        method: 'PUT',
-        data: {
-          cartIds,
-          selected: newSelectAll
-        }
+      await API.cart.batchSelectCartItems({
+        cartIds,
+        selected: newSelectAll
       })
     } catch (error) {
       console.error('批量更新选中状态失败:', error)
@@ -204,12 +172,9 @@ Page({
     this.setData({ cartItems })
     this.calculateTotal()
     
-    // 调用接口更新数量
+    // 使用封装的API更新数量
     try {
-      await this.request({
-        url: `cart/update/${cartItems[index].id}?quantity=${cartItems[index].quantity}`,
-        method: 'PUT'
-      })
+      await API.cart.updateCartItem(cartItems[index].id, cartItems[index].quantity)
     } catch (error) {
       console.error('更新数量失败:', error)
       // 回滚数量
@@ -236,12 +201,9 @@ Page({
     this.setData({ cartItems })
     this.calculateTotal()
     
-    // 调用接口更新数量
+    // 使用封装的API更新数量
     try {
-      await this.request({
-        url: `cart/update/${cartItems[index].id}?quantity=${cartItems[index].quantity}`,
-        method: 'PUT'
-      })
+      await API.cart.updateCartItem(cartItems[index].id, cartItems[index].quantity)
     } catch (error) {
       console.error('更新数量失败:', error)
       // 回滚数量
@@ -266,10 +228,8 @@ Page({
       success: async (res) => {
         if (res.confirm) {
           try {
-            await this.request({
-              url: `cart/remove/${item.id}`,
-              method: 'DELETE'
-            })
+            // 使用封装的API删除购物车商品
+            await API.cart.removeCartItem(item.id)
             
             cartItems.splice(index, 1)
             this.setData({ cartItems })
@@ -304,10 +264,8 @@ Page({
         if (res.confirm) {
           try {
             const openid = await this.getOpenId()
-            await this.request({
-              url: `cart/clear?openid=${openid}`,
-              method: 'DELETE'
-            })
+            // 使用封装的API清空购物车
+            await API.cart.clearCart(openid)
             
             this.setData({ cartItems: [] })
             this.calculateTotal()
