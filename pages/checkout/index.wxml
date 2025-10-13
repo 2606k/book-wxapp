@@ -85,7 +85,10 @@
         <view class="goods-info">
           <view class="goods-name">{{item.bookName}}</view>
           <view class="goods-price-qty">
-            <text class="goods-price">¥{{item.price / 100}}</text>
+            <view class="price-wrapper">
+              <text class="goods-price">¥{{(item.discountPrice || item.price) / 100}}</text>
+              <text wx:if="{{item.discountPrice && item.discountPrice < item.price}}" class="goods-original-price">¥{{item.price / 100}}</text>
+            </view>
             <text class="goods-qty">×{{item.quantity}}</text>
           </view>
         </view>

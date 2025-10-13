@@ -265,10 +265,22 @@ page {
   align-items: center;
 }
 
+.price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
 .goods-price {
   font-size: 30rpx;
   color: #ff4d4f;
   font-weight: bold;
+}
+
+.goods-original-price {
+  font-size: 22rpx;
+  color: #999;
+  text-decoration: line-through;
 }
 
 .goods-qty {

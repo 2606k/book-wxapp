@@ -87,6 +87,7 @@ Page({
           name: book.bookName,
           author: book.author,
           price: book.price,
+          discountPrice: book.discountPrice, // 添加折扣价字段
           imageUrl: book.imageurl,
           // 格式化价格显示（分转元）
           priceYuan: API.books.priceUtils.fenToYuan(book.price),
@@ -103,6 +104,7 @@ Page({
           name: book.bookName,
           author: book.author,
           price: book.price,
+          discountPrice: book.discountPrice, // 添加折扣价字段
           imageUrl: book.imageurl,
           priceYuan: API.books.priceUtils.fenToYuan(book.price),
           stock: book.stock

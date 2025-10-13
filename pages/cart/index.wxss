@@ -152,11 +152,23 @@ page {
   margin-bottom: 20rpx;
 }
 
+.item-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+}
+
 .item-price {
   font-size: 32rpx;
   color: #ff4d4f;
   font-weight: bold;
-  margin-bottom: 20rpx;
+}
+
+.item-original-price {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
 }
 
 .item-actions {

@@ -97,16 +97,25 @@ Page({
   calculateTotal() {
     const { cartItems } = this.data
     
-    // 使用工具函数计算总价和总数量
-    const totalAmount = API.cart.cartUtils.calculateTotal(cartItems, true)
-    const totalCount = API.cart.cartUtils.calculateTotalQuantity(cartItems, true)
+    // 计算总价和总数量（使用折扣价）
+    let totalAmount = 0
+    let totalCount = 0
+    
+    cartItems.forEach(item => {
+      if (item.selected) {
+        // 优先使用折扣价，否则使用原价
+        const price = item.discountPrice || item.price
+        totalAmount += price * item.quantity
+        totalCount += item.quantity
+      }
+    })
     
     // 检查是否全选
     const selectedCount = cartItems.filter(item => item.selected).length
     const selectAll = selectedCount === cartItems.length && cartItems.length > 0
     
     this.setData({
-      totalAmount: API.cart.cartUtils.formatPrice(totalAmount),
+      totalAmount: (totalAmount / 100).toFixed(2),
       totalCount,
       selectAll
     })

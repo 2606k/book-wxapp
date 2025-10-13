@@ -44,7 +44,10 @@
         
         <view class="item-info">
           <view class="item-name">{{item.bookName}}</view>
-          <view class="item-price">¥{{item.price / 100}}</view>
+          <view class="item-price-wrapper">
+            <text class="item-price">¥{{(item.discountPrice || item.price) / 100}}</text>
+            <text wx:if="{{item.discountPrice && item.discountPrice < item.price}}" class="item-original-price">¥{{item.price / 100}}</text>
+          </view>
           
           <view class="item-actions">
             <view class="quantity-control">
@@ -90,7 +93,7 @@
     <view class="footer-right">
       <view wx:if="{{!editMode}}" class="total-info">
         <text class="total-text">合计: </text>
-        <text class="total-amount">¥{{totalAmount / 100}}</text>
+        <text class="total-amount">¥{{totalAmount}}</text>
       </view>
       
       <button 

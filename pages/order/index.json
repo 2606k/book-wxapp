@@ -1,6 +1,6 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "我的预约",
+  "navigationBarTitleText": "我的订单",
   "navigationBarBackgroundColor":"#1993fc",
   "navigationBarTextStyle":"white",
   "enablePullDownRefresh": true,

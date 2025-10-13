@@ -81,7 +81,9 @@ Page({
     let totalCount = 0
     
     selectedItems.forEach(item => {
-      totalAmount += item.price * item.quantity
+      // 优先使用折扣价，否则使用原价
+      const price = item.discountPrice || item.price
+      totalAmount += price * item.quantity
       totalCount += item.quantity
     })
     

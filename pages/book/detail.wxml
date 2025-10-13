@@ -19,9 +19,10 @@
         <view class="book-publisher">出版社：{{book.publisher || '未知'}}</view>
         <view class="book-price">
           <text class="price-symbol">¥</text>
-          <text class="price-value">{{book.price / 100}}</text>
-          <text class="price-original" wx:if="{{book.originalPrice && book.originalPrice > book.price}}">
-            ¥{{book.originalPrice / 100}}
+          <text class="price-value">{{(book.discountPrice || book.price) / 100}}
+          </text>
+          <text class="price-original" wx:if="{{book.discountPrice && book.discountPrice < book.price}}">
+            ¥{{book.price / 100}}
           </text>
         </view>
         <view class="book-stock">

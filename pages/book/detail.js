@@ -54,7 +54,8 @@ Page({
           publisher: bookData.publisher,
           imageUrl: bookData.imageurl || bookData.imageUrl, // 后端返回的是 imageurl
           price: bookData.price,
-          originalPrice: bookData.originalPrice,
+          discountPrice: bookData.discountPrice, // 折扣价
+          originalPrice: bookData.originalPrice, // 原价（用于显示对比）
           stock: bookData.stock,
           isbn: bookData.isbn,
           categoryName: bookData.categoryName,
@@ -229,7 +230,9 @@ Page({
       name: this.data.book.name,
       author: this.data.book.author,
       imageUrl: this.data.book.imageUrl,
-      price: this.data.book.price,
+      price: this.data.book.discountPrice || this.data.book.price, // 优先使用折扣价
+      originalPrice: this.data.book.price, // 保留原价
+      discountPrice: this.data.book.discountPrice, // 保留折扣价
       quantity: this.data.quantity
     }
     

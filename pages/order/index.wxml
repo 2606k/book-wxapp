@@ -2,12 +2,12 @@
 <!-- 预约列表页面 -->
 <view class="appointment-list">
   <view class="list-header">
-    <text class="title">我的预约</text>
+    <text class="title">我的订单</text>
   </view>
   
   <view class="list-content">
     <view wx:if="{{appointmentList.length === 0}}" class="empty-state">
-      <text>暂无预约记录</text>
+      <text>暂无购买记录</text>
     </view>
     
     <view wx:for="{{appointmentList}}" wx:key="id" class="appointment-item">

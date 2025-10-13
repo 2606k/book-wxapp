@@ -99,7 +99,7 @@ Page({
   showLoginTip() {
     wx.showModal({
       title: '提示',
-      content: '请先登录后再查看预约记录',
+      content: '请先登录后再查看订单记录',
       confirmText: '去登录',
       cancelText: '取消',
       success: (res) => {

@@ -158,6 +158,7 @@ Page({
           name: book.bookName,
           author: book.author,
           price: book.price,
+          discountPrice: book.discountPrice, // 添加折扣价字段
           imageUrl: book.imageurl,
           stock: book.stock,
           category: book.categoryId,

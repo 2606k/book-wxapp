@@ -77,9 +77,8 @@
 }
 
 .book-price {
-  display: flex;
-  align-items: baseline;
-  gap: 8rpx;
+  display: inline-block; /* 或者 inline */
+  white-space: nowrap;
   margin-top: 8rpx;
 }
 
@@ -87,18 +86,24 @@
   font-size: 28rpx;
   color: #ff5722;
   font-weight: bold;
+  display: inline-block;
+  vertical-align: baseline;
 }
 
 .price-value {
   font-size: 44rpx;
   color: #ff5722;
   font-weight: bold;
+  display: inline-block;
+  vertical-align: baseline;
 }
 
 .price-original {
   font-size: 28rpx;
   color: #999;
   text-decoration: line-through;
+  /* display: inline-block;
+  vertical-align: baseline; */
 }
 
 .book-stock {

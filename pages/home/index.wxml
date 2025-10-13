@@ -61,7 +61,10 @@
       <view class="book-details">
         <view class="book-name">{{item.name}}</view>
         <view class="book-author">{{item.author}}</view>
-        <view class="book-price">¥{{item.price / 100}}</view>
+        <view class="book-price-wrapper">
+          <text class="book-price">¥{{(item.discountPrice || item.price) / 100}}</text>
+          <text wx:if="{{item.discountPrice && item.discountPrice < item.price}}" class="book-original-price">¥{{item.price / 100}}</text>
+        </view>
         <view class="add-to-cart" catchtap="addToCart" data-book="{{item}}">
           <text>加入购物车</text>
         </view>
