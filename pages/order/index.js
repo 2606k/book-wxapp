@@ -225,8 +225,13 @@ Page({
    */
   viewOrderDetail(e) {
     const { orderId } = e.currentTarget.dataset
+    const order = e.currentTarget.dataset.order
     wx.navigateTo({
-      url: `/pages/orderDetail/index?id=${orderId}`
+      url: `/pages/orderDetail/index?id=${orderId}`,
+      success: function (res) {
+        // 通过事件通道将完整订单对象传递到详情页，避免二次请求
+        res.eventChannel.emit('acceptOrder', { order })
+      }
     })
   },
 

@@ -2,7 +2,7 @@
 // 使用 promise 封装 request请求
 const request = (params)=>{
   // 定义公共的 url
-  const baseUrl = 'http://localhost:8082/'
+  const baseUrl = 'https://xiangyangsd.site/'
   return new Promise((resolve,reject)=>{
     // 发送网络请求
     wx.request({

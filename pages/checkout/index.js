@@ -1,4 +1,6 @@
 // pages/checkout/index.js
+const API = require('../../utils/api/index.js')
+
 Page({
   /**
    * 页面的初始数据
@@ -17,7 +19,12 @@ Page({
     // 提交中状态
     submitting: false,
     // 配送方式：0=自提，1=送货
-    deliveryType: 1
+    deliveryType: 1,
+    // 当前订单号（用于支付回调上报）
+    currentOutTradeNo: null,
+    // 自提时的收货人信息
+    pickupName: '',
+    pickupPhone: ''
   },
 
   /**
@@ -161,6 +168,24 @@ Page({
   },
 
   /**
+   * 自提收货人输入
+   */
+  onPickupNameInput(e) {
+    this.setData({
+      pickupName: e.detail.value
+    })
+  },
+
+  /**
+   * 自提手机号输入
+   */
+  onPickupPhoneInput(e) {
+    this.setData({
+      pickupPhone: e.detail.value
+    })
+  },
+
+  /**
    * 切换配送方式
    */
   changeDeliveryType(e) {
@@ -187,14 +212,31 @@ Page({
    * 提交订单
    */
   async submitOrder() {
-    const { selectedItems, selectedAddress, totalAmount, remark, submitting, deliveryType } = this.data
+    const { selectedItems, selectedAddress, totalAmount, remark, submitting, deliveryType, pickupName, pickupPhone } = this.data
     
     if (submitting) return
     
-    // 送货方式需要地址，自提不需要
+    // 送货方式需要地址
     if (deliveryType === 1 && !selectedAddress) {
       this.showToast('请选择收货地址')
       return
+    }
+    
+    // 自提方式需要收货人和手机号
+    if (deliveryType === 0) {
+      if (!pickupName || !pickupName.trim()) {
+        this.showToast('请输入收货人姓名')
+        return
+      }
+      if (!pickupPhone || !pickupPhone.trim()) {
+        this.showToast('请输入手机号')
+        return
+      }
+      // 验证手机号格式
+      if (!API.order.orderUtils.validatePhone(pickupPhone)) {
+        this.showToast('请输入正确的手机号')
+        return
+      }
     }
     
     if (selectedItems.length === 0) {
@@ -225,6 +267,13 @@ Page({
         orderData.address = selectedAddress.address
       }
       
+      // 如果是自提，添加收货人信息
+      if (deliveryType === 0) {
+        orderData.name = pickupName
+        orderData.phone = pickupPhone
+        orderData.address = '自提' // 自提时地址填写"自提"
+      }
+      
       console.log('提交订单数据:', orderData)
       
       // 调用创建订单接口
@@ -237,6 +286,15 @@ Page({
       if (res.data && res.data.code === 200) {
         const payData = res.data.data
         
+        // 从返回的 package 中提取订单号
+        // package 格式：prepay_id=xxx
+        // 实际订单号需要从订单创建返回或后端返回中获取
+        // 这里假设后端会在 payData 中返回 outTradeNo
+        const outTradeNo = payData.outTradeNo || this.extractOutTradeNo(payData)
+        
+        // 保存订单号
+        this.setData({ currentOutTradeNo: outTradeNo })
+        
         // 调起微信支付
         wx.requestPayment({
           appId: payData.appId,
@@ -245,8 +303,17 @@ Page({
           package: payData.package,
           signType: payData.signType,
           paySign: payData.paySign,
-          success: () => {
-            console.log('支付成功')
+          success: async () => {
+            console.log('支付成功，订单号:', outTradeNo)
+            
+            // 上报支付成功
+            try {
+              await API.order.reportPaySuccess(outTradeNo)
+              console.log('支付成功已上报')
+            } catch (error) {
+              console.error('上报支付成功失败:', error)
+            }
+            
             this.showToast('支付成功')
             
             // 清除购物车中的已购买商品
@@ -259,9 +326,18 @@ Page({
               })
             }, 1500)
           },
-          fail: (err) => {
-            console.log('支付失败', err)
-            this.showToast('支付失败')
+          fail: async (err) => {
+            console.log('支付失败或取消', err)
+            
+            // 上报支付失败
+            try {
+              await API.order.reportPayFail(outTradeNo)
+              console.log('支付失败已上报，订单已删除')
+            } catch (error) {
+              console.error('上报支付失败失败:', error)
+            }
+            
+            this.showToast('支付已取消')
           }
         })
       } else {
@@ -321,6 +397,17 @@ Page({
         reject(new Error('无法获取openid'))
       }
     })
+  },
+
+  /**
+   * 从支付数据中提取订单号（备用方法）
+   * 注意：最好让后端直接返回 outTradeNo
+   */
+  extractOutTradeNo(payData) {
+    // 如果后端没有直接返回，这里返回null
+    // 实际使用时需要后端在 payData 中添加 outTradeNo 字段
+    console.warn('未找到订单号，请确保后端返回 outTradeNo')
+    return null
   },
 
   /**

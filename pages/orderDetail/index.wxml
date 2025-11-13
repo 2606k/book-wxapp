@@ -1,0 +1,40 @@
+<view class="order-detail">
+  <!-- 订单状态卡片 -->
+  <view class="status-card" wx:if="{{order}}">
+    <view class="status-badge" style="background-color: {{order.statusColor}};">
+      {{order.statusText}}
+    </view>
+  </view>
+
+  <!-- 已购书籍 -->
+  <view class="section">
+    <text class="section-title">已购书籍</text>
+    <view wx:if="{{orderItems.length === 0}}" class="empty">
+      <text>暂无商品</text>
+    </view>
+    <view wx:for="{{orderItems}}" wx:key="index" class="item-row">
+      <text class="book-name">{{item.bookName}}</text>
+      <text class="price">￥{{item.priceYuan}}</text>
+      <text class="qty">x{{item.quantity}}</text>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="section" wx:if="{{order}}">
+    <text class="section-title">订单信息</text>
+    <view class="kv"><text class="k">订单号</text><text class="v">{{order.outTradeNo || order.id}}</text></view>
+    <view class="kv"><text class="k">订单状态</text><text class="v" style="color: {{order.statusColor}};">{{order.statusText}}</text></view>
+    <view class="kv"><text class="k">下单时间</text><text class="v">{{order.createdat}}</text></view>
+    <view class="kv" wx:if="{{order.address}}"><text class="k">收货地址</text><text class="v">{{order.address}}</text></view>
+    <view class="kv" wx:if="{{order.name}}"><text class="k">收货人</text><text class="v">{{order.name}} {{order.phone}}</text></view>
+    <view class="kv"><text class="k">总金额</text><text class="v amount">￥{{order.moneyYuan}}</text></view>
+    <view class="kv" wx:if="{{order.remark}}"><text class="k">备注</text><text class="v">{{order.remark}}</text></view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="action-bar" wx:if="{{order && order.canRefund}}">
+    <button class="refund-btn" bindtap="handleRefund">申请退款</button>
+  </view>
+</view>
+
+

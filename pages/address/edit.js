@@ -71,22 +71,22 @@ Page({
   /**
    * 选择地址
    */
-  chooseLocation() {
-    wx.chooseLocation({
-      success: (res) => {
-        this.setData({
-          'formData.address': res.address + res.name
-        })
-      },
-      fail: (error) => {
-        console.log('选择位置失败:', error)
-        if (error.errMsg.includes('cancel')) {
-          return
-        }
-        this.showToast('获取位置失败')
-      }
-    })
-  },
+  // chooseLocation() {
+  //   wx.chooseLocation({
+  //     success: (res) => {
+  //       this.setData({
+  //         'formData.address': res.address + res.name
+  //       })
+  //     },
+  //     fail: (error) => {
+  //       console.log('选择位置失败:', error)
+  //       if (error.errMsg.includes('cancel')) {
+  //         return
+  //       }
+  //       this.showToast('获取位置失败')
+  //     }
+  //   })
+  // },
 
   /**
    * 保存地址

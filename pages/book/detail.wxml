@@ -36,10 +36,10 @@
     <view class="book-details-section">
       <view class="section-title">图书详情</view>
       
-      <view class="detail-item">
+      <!-- <view class="detail-item">
         <text class="label">ISBN：</text>
         <text class="value">{{book.isbn || '暂无'}}</text>
-      </view>
+      </view> -->
       
       <view class="detail-item">
         <text class="label">分类：</text>
@@ -51,15 +51,15 @@
         <text class="value">{{book.publishDate || '暂无'}}</text>
       </view>
       
-      <view class="detail-item">
+      <!-- <view class="detail-item">
         <text class="label">页数：</text>
         <text class="value">{{book.pages || '暂无'}} 页</text>
-      </view>
+      </view> -->
       
-      <view class="detail-item">
+      <!-- <view class="detail-item">
         <text class="label">语言：</text>
         <text class="value">{{book.language || '中文'}}</text>
-      </view>
+      </view> -->
     </view>
 
     <!-- 书籍简介 -->

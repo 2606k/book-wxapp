@@ -55,12 +55,8 @@ const closeOrder = (outTradeNo) => {
  */
 const applyRefund = (orderId, reason = '') => {
   return request({
-    url: 'appoint/refund/apply',
-    method: 'POST',
-    data: {
-      orderId,
-      reason
-    }
+    url: `appoint/refund/apply?orderId=${orderId}${reason ? '&reason=' + encodeURIComponent(reason) : ''}`,
+    method: 'POST'
   })
 }
 
@@ -136,7 +132,30 @@ const ORDER_STATUS = {
   UNPAID: '待支付',      // 订单已创建，等待支付
   PAID: '0',            // 已支付
   REFUND_APPLY: '1',    // 申请退款
-  REFUNDED: '2'         // 已退款
+  REFUNDED: '2',        // 已退款
+  COMPLETED: '3'        // 已完成
+}
+
+/**
+ * 前端上报支付成功（幂等）
+ * @param {String} outTradeNo - 商户订单号
+ */
+const reportPaySuccess = (outTradeNo) => {
+  return request({
+    url: `appoint/client/pay/success?outTradeNo=${outTradeNo}`,
+    method: 'POST'
+  })
+}
+
+/**
+ * 前端上报支付失败/取消（幂等）
+ * @param {String} outTradeNo - 商户订单号
+ */
+const reportPayFail = (outTradeNo) => {
+  return request({
+    url: `appoint/client/pay/fail?outTradeNo=${outTradeNo}`,
+    method: 'POST'
+  })
 }
 
 /**
@@ -152,7 +171,8 @@ const orderUtils = {
       '待支付': '待支付',
       '0': '已支付',
       '1': '申请退款',
-      '2': '已退款'
+      '2': '已退款',
+      '3': '已完成'
     }
     return statusMap[status] || '未知状态'
   },
@@ -166,7 +186,8 @@ const orderUtils = {
       '待支付': '#ff9500',
       '0': '#07c160',
       '1': '#10aeff',
-      '2': '#999999'
+      '2': '#999999',
+      '3': '#52c41a'
     }
     return colorMap[status] || '#000000'
   },
@@ -228,8 +249,32 @@ const orderUtils = {
    * @param {String} status - 订单状态
    */
   canRefund: (status) => {
-    // 只有已支付的订单可以申请退款
+    // 只有已支付(0)的订单可以申请退款
     return status === '0' || status === ORDER_STATUS.PAID
+  },
+
+  /**
+   * 判断订单是否正在退款中
+   * @param {String} status - 订单状态
+   */
+  isRefunding: (status) => {
+    return status === '1' || status === ORDER_STATUS.REFUND_APPLY
+  },
+
+  /**
+   * 判断订单是否已退款
+   * @param {String} status - 订单状态
+   */
+  isRefunded: (status) => {
+    return status === '2' || status === ORDER_STATUS.REFUNDED
+  },
+
+  /**
+   * 判断订单是否已完成
+   * @param {String} status - 订单状态
+   */
+  isCompleted: (status) => {
+    return status === '3' || status === ORDER_STATUS.COMPLETED
   },
 
   /**
@@ -251,6 +296,8 @@ module.exports = {
   getOrderList,
   getUserOrders,
   getOrdersByStatus,
+  reportPaySuccess,
+  reportPayFail,
   ORDER_STATUS,
   orderUtils
 }

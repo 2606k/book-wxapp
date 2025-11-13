@@ -1,13 +1,13 @@
 <!-- 轮播图 -->
 <swiper indicator-dots autoplay circular interval="{{3000}}" class="book-banner">
   <swiper-item>
-    <image src='https://img.alicdn.com/imgextra/i4/2206678097909/O1CN01Z5n8yI1L3Q8ZYqo3I_!!2206678097909-0-cib.jpg'></image>
+    <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945602490.jpg'></image>
   </swiper-item>
   <swiper-item>
-    <image src='https://img.alicdn.com/imgextra/i2/2206678097909/O1CN01lNqX3A1L3Q8aGpaBK_!!2206678097909-0-cib.jpg'></image>
+    <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945608154.jpg'></image>
   </swiper-item>
   <swiper-item>
-    <image src='https://img.alicdn.com/imgextra/i3/2206678097909/O1CN01N2mYeP1L3Q8a6j5wn_!!2206678097909-0-cib.jpg'></image>
+    <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945611143.jpg'></image>
   </swiper-item>
 </swiper>
 

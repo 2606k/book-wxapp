@@ -2,7 +2,7 @@
 <!-- 预约列表页面 -->
 <view class="appointment-list">
   <view class="list-header">
-    <text class="title">我的订单</text>
+    <text class="title">支付订单</text>
   </view>
   
   <view class="list-content">
@@ -10,14 +10,14 @@
       <text>暂无购买记录</text>
     </view>
     
-    <view wx:for="{{appointmentList}}" wx:key="id" class="appointment-item">
+    <view wx:for="{{appointmentList}}" wx:key="id" class="appointment-item" bindtap="viewOrderDetail" data-order-id="{{item.id}}" data-order="{{item}}">
       <view class="item-header">
         <text class="name">{{item.name}}</text>
         <text class="phone">{{item.phone}}</text>
       </view>
       
       <view class="item-content">
-        <view class="info-row">
+        <!-- <view class="info-row">
           <text class="label">服务类型：</text>
           <text class="value">{{item.repairtype}}</text>
         </view>
@@ -25,20 +25,29 @@
         <view class="info-row">
           <text class="label">品牌：</text>
           <text class="value">{{item.brandname}}</text>
+        </view> -->
+
+        <view class="info-row">
+          <text class="label">提货方式：</text>
+          <text class="value">{{item.deliveryType}}</text>
         </view>
         
         <view class="info-row">
-          <text class="label">服务地址：</text>
+          <text class="label">送货地址：</text>
           <text class="value">{{item.address}}</text>
         </view>
         
+        <!-- <view class="info-row">
+          <text class="label">支付时间：</text>
+          <text class="value">{{item.payTime}}</text>
+        </view> -->
         <view class="info-row">
-          <text class="label">预约时间：</text>
-          <text class="value">{{item.time}}</text>
+          <text class="label">支付金额(元)：</text>
+          <text class="value">{{item.moneyYuan}}</text>
         </view>
         
         <view class="info-row">
-          <text class="label">创建时间：</text>
+          <text class="label">下单时间：</text>
           <text class="value">{{item.createdat}}</text>
         </view>
       </view>

@@ -5,7 +5,8 @@ App({
    */
   globalData: {
     // API基础地址
-    baseUrl: 'http://localhost:8083/',
+    baseUrl: 'https://xiangyangsd.site/',
+    // baseUrl:'http://localhost:8083/',
     // 用户信息
     userInfo: null,
     // openid

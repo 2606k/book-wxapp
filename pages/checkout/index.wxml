@@ -55,13 +55,44 @@
     </view>
   </view>
   
-  <!-- 自提提示 -->
-  <view class="pickup-tip" wx:if="{{deliveryType === 0}}">
-    <view class="tip-icon">ℹ️</view>
-    <view class="tip-content">
-      <text class="tip-title">自提地址</text>
-      <text class="tip-address">书店地址：北京市朝阳区建国路88号SOHO现代城A座1层</text>
-      <text class="tip-time">营业时间：9:00-21:00</text>
+  <!-- 自提提示和联系信息 -->
+  <view class="pickup-section" wx:if="{{deliveryType === 0}}">
+    <!-- 联系人信息 -->
+    <view class="pickup-info-section">
+      <view class="section-title">联系人信息</view>
+      <view class="input-group">
+        <view class="input-item">
+          <text class="input-label">收货人</text>
+          <input 
+            class="input-field" 
+            placeholder="请输入收货人姓名"
+            value="{{pickupName}}"
+            bindinput="onPickupNameInput"
+            maxlength="20"
+          />
+        </view>
+        <view class="input-item">
+          <text class="input-label">手机号</text>
+          <input 
+            class="input-field" 
+            placeholder="请输入手机号"
+            type="number"
+            value="{{pickupPhone}}"
+            bindinput="onPickupPhoneInput"
+            maxlength="11"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 自提提示 -->
+    <view class="pickup-tip">
+      <view class="tip-icon">ℹ️</view>
+      <view class="tip-content">
+        <text class="tip-title">自提地址</text>
+        <text class="tip-address">书店地址：辉县市西大街中段路北（13937313682）</text>
+        <!-- <text class="tip-time">营业时间：9:00-21:00</text> -->
+      </view>
     </view>
   </view>
 
