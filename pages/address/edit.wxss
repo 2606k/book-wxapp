@@ -59,7 +59,7 @@ page {
 
 .input {
   width: 100%;
-  padding: 25rpx;
+  /* padding: 35rpx; */
   border: 1rpx solid #e0e0e0;
   border-radius: 10rpx;
   font-size: 30rpx;

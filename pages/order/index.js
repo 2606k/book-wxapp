@@ -224,10 +224,22 @@ Page({
    * 查看订单详情
    */
   viewOrderDetail(e) {
-    const { orderId } = e.currentTarget.dataset
+    const { outTradeNo } = e.currentTarget.dataset
     const order = e.currentTarget.dataset.order
+    
+    // 如果 dataset 中没有 outTradeNo，尝试从 order 对象中获取
+    const orderNo = outTradeNo || (order && order.outTradeNo)
+    
+    if (!orderNo) {
+      wx.showToast({
+        title: '订单号不存在',
+        icon: 'none'
+      })
+      return
+    }
+    
     wx.navigateTo({
-      url: `/pages/orderDetail/index?id=${orderId}`,
+      url: `/pages/orderDetail/detail?id=${orderNo}`,
       success: function (res) {
         // 通过事件通道将完整订单对象传递到详情页，避免二次请求
         res.eventChannel.emit('acceptOrder', { order })

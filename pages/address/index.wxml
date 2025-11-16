@@ -40,12 +40,12 @@
               bindtap="setDefaultAddress"
               data-index="{{index}}"
             >
-              <icon 
+              <!-- <icon 
                 type="{{item.isDefault ? 'success' : 'circle'}}" 
                 size="16"
                 color="{{item.isDefault ? '#007aff' : '#ccc'}}"
-              />
-              <text class="default-text">设为默认</text>
+              /> -->
+              <!-- <text class="default-text">设为默认</text> -->
             </view>
           </view>
           

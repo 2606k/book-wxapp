@@ -1,13 +1,16 @@
 <!-- 轮播图 -->
 <swiper indicator-dots autoplay circular interval="{{3000}}" class="book-banner">
   <swiper-item>
+    <image src='https://minio.xiangyangsd.site/bookstore/微信图片_20251115134640.jpg'></image>
+  </swiper-item>
+  <swiper-item>
+    <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945611143.jpg'></image>
+  </swiper-item>
+  <swiper-item>
     <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945602490.jpg'></image>
   </swiper-item>
   <swiper-item>
     <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945608154.jpg'></image>
-  </swiper-item>
-  <swiper-item>
-    <image src='https://minio.xiangyangsd.site/bookstore/mmexport1762945611143.jpg'></image>
   </swiper-item>
 </swiper>
 

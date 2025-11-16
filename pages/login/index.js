@@ -139,9 +139,9 @@ Page({
       
       // 8. 延迟返回上一页
       setTimeout(() => {
-        wx.navigateBack({
-          delta: 1
-        })
+                        wx.navigateBack({
+                          delta: 1
+                        })
       }, 1500)
       
     } catch (error) {
@@ -196,7 +196,7 @@ Page({
    * 取消登录
    */
   handleCancel() {
-    const app = getApp()
+                  const app = getApp()
     
     // 执行取消回调
     if (app.globalData.loginCancelCallback && typeof app.globalData.loginCancelCallback === 'function') {
@@ -204,8 +204,8 @@ Page({
     }
     
     // 返回上一页
-    wx.navigateBack({
-      delta: 1
-    })
-  }
+                        wx.navigateBack({
+                          delta: 1
+                        })
+                      }
 })

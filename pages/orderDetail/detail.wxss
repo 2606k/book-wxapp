@@ -109,9 +109,21 @@
   gap: 20rpx;
 }
 
+/* 退款按钮样式 */
 .refund-btn {
   padding: 20rpx 48rpx;
   background: #ff4d4f;
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+}
+
+/* 确认收货按钮样式 */
+.confirm-btn {
+  padding: 20rpx 48rpx;
+  background: #07c160;  /* 绿色表示确认操作 */
   color: #fff;
   border-radius: 50rpx;
   font-size: 28rpx;
@@ -123,4 +135,10 @@
   opacity: 0.8;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
 

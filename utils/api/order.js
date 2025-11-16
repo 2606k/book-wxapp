@@ -4,6 +4,7 @@
  */
 
 const { request } = require('../request.js')
+const { order } = require('./index.js')
 
 /**
  * 创建订单并发起支付
@@ -34,6 +35,17 @@ const queryOrder = (outTradeNo) => {
     url: 'appoint/queryOrder',
     method: 'GET',
     data: { outTradeNo }
+  })
+}
+
+/**
+ * 获取订单详情
+ * @param {String|Number} outTradeNo - 商户订单号（注意：不是orderId主键）
+ */
+const getOrderDetail = (outTradeNo) => {
+  return request({
+    url: `appoint/detail/${outTradeNo}`,
+    method: 'GET'
   })
 }
 
@@ -73,6 +85,17 @@ const executeRefund = (orderId, reason = '') => {
       orderId,
       reason
     }
+  })
+}
+/**
+ * 确认收货
+ * @param {*} orderId 
+ * @param {*} reason 
+ */
+const setUserPaySuccess = (orderId) => {
+  return request({
+    url:`appoint/user/pay/setUserPaysuccess?orderId=${orderId}`,
+    method:'POST'
   })
 }
 
@@ -133,7 +156,8 @@ const ORDER_STATUS = {
   PAID: '0',            // 已支付
   REFUND_APPLY: '1',    // 申请退款
   REFUNDED: '2',        // 已退款
-  COMPLETED: '3'        // 已完成
+  COMPLETED: '3',        // 已完成
+  CONFIRM : '4'         //待收货
 }
 
 /**
@@ -172,7 +196,8 @@ const orderUtils = {
       '0': '已支付',
       '1': '申请退款',
       '2': '已退款',
-      '3': '已完成'
+      '3': '已完成',
+      '4': '待收货',
     }
     return statusMap[status] || '未知状态'
   },
@@ -187,7 +212,8 @@ const orderUtils = {
       '0': '#07c160',
       '1': '#10aeff',
       '2': '#999999',
-      '3': '#52c41a'
+      '3': '#52c41a',
+      '4': '#07c160',
     }
     return colorMap[status] || '#000000'
   },
@@ -250,7 +276,7 @@ const orderUtils = {
    */
   canRefund: (status) => {
     // 只有已支付(0)的订单可以申请退款
-    return status === '0' || status === ORDER_STATUS.PAID
+    return status === '0' || status === '4' 
   },
 
   /**
@@ -284,15 +310,25 @@ const orderUtils = {
   canClose: (status) => {
     // 只有待支付的订单可以关闭
     return status === '待支付' || status === ORDER_STATUS.UNPAID
+  },
+
+  /**
+   * 判断订单是否可以确认收货
+   * @param {String} status - 订单状态
+   */
+  confirm: (status)=>{
+    return status === '4' || status === ORDER_STATUS.CONFIRM
   }
 }
 
 module.exports = {
   createOrder,
   queryOrder,
+  getOrderDetail,
   closeOrder,
   applyRefund,
   executeRefund,
+  setUserPaySuccess,
   getOrderList,
   getUserOrders,
   getOrdersByStatus,

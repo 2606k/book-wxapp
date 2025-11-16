@@ -39,31 +39,31 @@
         <view class="address-input-group">
           <textarea 
             class="address-input" 
-            placeholder="请输入详细地址，包括省市区街道门牌号等"
+            placeholder="请输入详细地址，仅支持辉县地区"
             value="{{formData.address}}"
             data-field="address"
             bindinput="onFormInput"
             auto-height
           />
-          <view class="location-btn" bindtap="chooseLocation">
+          <!-- <view class="location-btn" bindtap="chooseLocation">
             <text class="location-icon">📍</text>
             <text class="location-text">定位</text>
-          </view>
+          </view> -->
         </view>
       </view>
     </view>
 
     <!-- 设置默认 -->
-    <view class="form-section">
-      <view class="default-setting">
-        <text class="default-label">设为默认地址</text>
+     <view class="form-section">
+      <!-- <view class="default-setting"> -->
+        <!-- <text class="default-label">设为默认地址</text>
         <switch 
           class="default-switch"
           checked="{{formData.isDefault}}"
           bindchange="toggleDefault"
           color="#007aff"
-        />
-      </view>
+        /> -->
+      <!-- </view> -->
     </view>
   </view>
 

@@ -10,26 +10,26 @@
       <text>暂无购买记录</text>
     </view>
     
-    <view wx:for="{{appointmentList}}" wx:key="id" class="appointment-item" bindtap="viewOrderDetail" data-order-id="{{item.id}}" data-order="{{item}}">
+    <view wx:for="{{appointmentList}}" wx:key="id" class="appointment-item" bindtap="viewOrderDetail" data-order-id="{{item.id}}" data-out-trade-no="{{item.outTradeNo}}" data-order="{{item}}">
       <view class="item-header">
         <text class="name">{{item.name}}</text>
         <text class="phone">{{item.phone}}</text>
       </view>
       
       <view class="item-content">
-        <!-- <view class="info-row">
+        <!--  <view class="info-row">
           <text class="label">服务类型：</text>
           <text class="value">{{item.repairtype}}</text>
-        </view>
+        </view> -->
         
         <view class="info-row">
-          <text class="label">品牌：</text>
-          <text class="value">{{item.brandname}}</text>
-        </view> -->
+          <text class="label">订单状态：</text>
+          <text class="value">{{item.status === '0' ? '已支付' : item.status === '1' ? '申请退款' : item.status === '2' ? '已退款' : item.status === '3' ? '已完成' : item.status === '4' ? '已发货' : '未知状态'}}</text>
+        </view>
 
         <view class="info-row">
           <text class="label">提货方式：</text>
-          <text class="value">{{item.deliveryType}}</text>
+          <text class="value">{{item.deliveryType == '1' ? '送货上门' : '自提'}}</text>
         </view>
         
         <view class="info-row">
