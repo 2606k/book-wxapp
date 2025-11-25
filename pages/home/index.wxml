@@ -24,7 +24,7 @@
 
 <!-- 书籍分类区域 -->
 <view class="category-container">
-  <view class="category-title">图书分类</view>
+  <view class="category-title">图书最新分类</view>
   <view class="category-grid">
     <view class="category-item" 
           wx:for="{{categories}}" 
@@ -39,7 +39,7 @@
 </view>
 
 <!-- 热门推荐 -->
-<!-- <view class="recommend-section">
+<view class="recommend-section">
   <view class="section-title">热门推荐</view>
   <scroll-view class="recommend-scroll" scroll-x>
     <view class="recommend-list">
@@ -48,12 +48,15 @@
         <view class="book-info">
           <view class="book-title">{{item.name}}</view>
           <view class="book-author">{{item.author}}</view>
-          <view class="book-price">¥{{item.price / 100}}</view>
+          <view class="book-price-wrapper">
+          <text class="book-price">¥{{(item.discountPrice || item.price) / 100}}</text>
+          <text wx:if="{{item.discountPrice && item.discountPrice < item.price}}" class="book-original-price">¥{{item.price / 100}}</text>
+        </view>
         </view>
       </view>
     </view>
   </scroll-view>
-</view> -->
+</view>
 
 <!-- 新书上架 -->
 <view class="new-books-section">

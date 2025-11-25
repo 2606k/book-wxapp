@@ -25,10 +25,11 @@ const addCategory = (data) => {
  * 获取分类列表
  * 返回所有书籍分类列表
  */
-const getCategoryList = () => {
+const getCategoryList = (params = {}) => {
   return request({
-    url: 'category/list',
-    method: 'GET'
+    url: `category/list`,
+    method: 'GET',
+    data: params
   })
 }
 

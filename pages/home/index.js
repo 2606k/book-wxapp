@@ -29,7 +29,10 @@ Page({
    */
   async loadCategories() {
     try {
-      const res = await API.categories.getCategoryList()
+      const res = await API.categories.getCategoryList({
+        page: 1,
+        size: 6,
+      })
       
       if (res.data && res.data.code === 200) {
         // 获取所有分类数据（分页格式）
@@ -69,8 +72,9 @@ Page({
       // 加载推荐书籍（获取前6本书籍）
       const recommendRes = await API.books.getBookList({
         page: 1,
-        size: 6,
-        stockStatus: 'inStock' // 只显示有库存的
+        size: 1000,
+        stockStatus: 'inStock' ,// 只显示有库存的
+        isPinned : 1
       })
 
       // 加载新书（按创建时间倒序，获取前4本）
@@ -134,10 +138,9 @@ Page({
   /**
    * 跳转到分类页面
    */
-  goToCategory(e) {
-    const { id, name } = e.currentTarget.dataset
-    wx.navigateTo({
-      url: `/pages/categoryBrand/index?categoryId=${id}&categoryName=${encodeURIComponent(name)}`
+  goToCategory() {
+    wx.switchTab({
+      url: '/pages/categoryBrand/index'
     })
   },
 

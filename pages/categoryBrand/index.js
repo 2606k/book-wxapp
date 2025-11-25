@@ -72,7 +72,10 @@ Page({
    */
   async loadCategories() {
     try {
-      const res = await API.categories.getCategoryList()
+      const res = await API.categories.getCategoryList({
+        page: 1,
+        size: 100000,
+      })
       
       if (res.data && res.data.code === 200) {
         // 获取所有分类数据（分页格式）
