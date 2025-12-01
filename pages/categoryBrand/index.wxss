@@ -59,7 +59,7 @@ page {
   justify-content: center;
   padding: 25rpx;
   border-right: 1rpx solid #e0e0e0;
-  font-size: 28rpx;
+  font-size: 33rpx;
   color: #333;
   position: relative;
 }

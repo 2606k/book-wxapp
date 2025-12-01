@@ -50,9 +50,8 @@ const removeCartItem = (cartId) => {
  */
 const clearCart = (openid) => {
   return request({
-    url: 'cart/clear',
-    method: 'DELETE',
-    data: { openid }
+    url: `cart/clear?openid=${openid}`,
+    method: 'DELETE'
   })
 }
 

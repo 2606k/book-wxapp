@@ -74,14 +74,16 @@ Page({
         page: 1,
         size: 1000,
         stockStatus: 'inStock' ,// 只显示有库存的
-        isPinned : 1
+        isPinned : 1,
+        sortType:"hot"
       })
 
       // 加载新书（按创建时间倒序，获取前4本）
       const newBooksRes = await API.books.getBookList({
         page: 1,
         size: 4,
-        stockStatus: 'inStock'
+        stockStatus: 'inStock',
+        sortType:"newest"
       })
 
       if (recommendRes.data && recommendRes.data.code === 200) {

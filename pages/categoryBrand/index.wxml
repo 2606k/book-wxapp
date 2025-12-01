@@ -12,7 +12,7 @@
 <!-- 筛选栏 -->
 <view class="filter-container">
   <view class="filter-item" bindtap="showCategoryFilter">
-    <text>分类: {{selectedCategoryName || '全部'}}</text>
+    <text style="color: rgb(231, 61, 31);">分类: {{selectedCategoryName || '全部'}}</text>
     <text class="arrow-down">▼</text>
   </view>
   <view class="filter-item" bindtap="showSortFilter">
